@@ -9,10 +9,23 @@
 import UIKit
 
 class ViewController: UIViewController {
+  let tmdb = TMDBService()
 
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
+    
+    tmdb.initFilmFromID(550) {
+      movie in
+      print("never got here")
+      print("\(movie)")
+    }
+    
+  }
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(true)
+    
+    
   }
 
   override func didReceiveMemoryWarning() {
