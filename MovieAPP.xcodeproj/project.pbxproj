@@ -20,6 +20,10 @@
 		7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB8F1D485977007D4AE1 /* Movie.swift */; };
 		7C3BDB921D485BD0007D4AE1 /* TMDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */; };
 		7C3BDB941D485F27007D4AE1 /* FilmDataBaseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */; };
+		7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */; };
+		7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */; };
+		7CF4CF5B1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */; };
+		7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */; };
 		FDC298DBBBDD81DCDF5AD053 /* Pods_MovieAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B643D6929F153B232A944C /* Pods_MovieAPP.framework */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +67,10 @@
 		7C3BDB8F1D485977007D4AE1 /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBService.swift; sourceTree = "<group>"; };
 		7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmDataBaseDelegate.swift; sourceTree = "<group>"; };
+		7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
+		7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
+		7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardViewDelegate.swift; sourceTree = "<group>"; };
+		7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardOverlayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +141,10 @@
 				7C3973E61D484AF10003771B /* LaunchScreen.storyboard */,
 				7C3973E91D484AF10003771B /* Info.plist */,
 				7C3BDB8D1D485540007D4AE1 /* NetworkOperations.swift */,
+				7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */,
+				7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */,
+				7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */,
+				7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */,
 				7C3BDB8F1D485977007D4AE1 /* Movie.swift */,
 				7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */,
 				7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */,
@@ -361,7 +373,11 @@
 				7C3BDB921D485BD0007D4AE1 /* TMDBService.swift in Sources */,
 				7C3BDB8E1D485540007D4AE1 /* NetworkOperations.swift in Sources */,
 				7C3BDB941D485F27007D4AE1 /* FilmDataBaseDelegate.swift in Sources */,
+				7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */,
+				7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */,
 				7C3973E01D484AF10003771B /* ViewController.swift in Sources */,
+				7CF4CF5B1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift in Sources */,
+				7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */,
 				7C39740E1D484D9F0003771B /* keysUtility.swift in Sources */,
 				7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */,
 				7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */,

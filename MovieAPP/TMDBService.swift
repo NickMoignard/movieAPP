@@ -29,10 +29,6 @@ struct TMDBService: FilmDataBaseDelegate {
   let baseImageURL = NSURL(string: "https://image.tmdb.org/t/p/")!
   let api = NetworkOperation()
   
-  func getImage(path: String, size: String = "default size", completionHandler: (UIImage?) -> Void) {
-    // ...
-  }
-  
   func initFilmFromID(id: Int, completionHandler: (Movie?) -> Void) {
     // create a movie struct from the given film id
     let url = NSURL(string: "3/movie/\(id)", relativeToURL: self.baseURL)!
@@ -40,15 +36,12 @@ struct TMDBService: FilmDataBaseDelegate {
       "api_key": "\(getAPIKey("tMDB"))",
       "append_to_response": "credits"
     ]
-    
     api.downloadJSONFromURL(url, parameters: urlParameters) {
       // Initialize Movie Struct from JSON
       json in
-
       if let json = json {
         let _ = Movie(json: json, dataBaseDelegate: self) {
           movieStruct in
-
           // the Movie.init() has a callback that returns itself after a poster has been downloaded and added to the struct
           completionHandler(movieStruct)
         }
@@ -57,7 +50,6 @@ struct TMDBService: FilmDataBaseDelegate {
   }
   
   func getMoviePoster(json: JSON, size: String, completionHandler: (UIImage?) -> Void) -> Void {
-
     if let path = json["poster_path"].string {
       let url = NSURL(string: "\(size)/\(path)", relativeToURL: self.baseImageURL)!
       self.api.downloadImageFromURL(url) {
@@ -66,5 +58,4 @@ struct TMDBService: FilmDataBaseDelegate {
       }
     }
   }
-    
 }
