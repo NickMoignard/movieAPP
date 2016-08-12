@@ -27,6 +27,7 @@
 		7C40F3121D5D88DA00724F00 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C40F3101D5D88DA00724F00 /* FBSDKCoreKit.framework */; };
 		7C40F3131D5D88DA00724F00 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C40F3111D5D88DA00724F00 /* FBSDKShareKit.framework */; };
 		7C40F3151D5D91BF00724F00 /* SuperSwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */; };
+		7C8980691D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8980681D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift */; };
 		7CBB37971D4C2A3E00E76BF1 /* FilmCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */; };
 		7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */; };
 		7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */; };
@@ -86,6 +87,7 @@
 		7C40F3101D5D88DA00724F00 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../SDKs/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		7C40F3111D5D88DA00724F00 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../SDKs/FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
 		7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperSwipeableCardView.swift; sourceTree = "<group>"; };
+		7C8980681D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSwipeableViewControllerDelegate.swift; sourceTree = "<group>"; };
 		7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmCardViewController.swift; sourceTree = "<group>"; };
 		7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterSwipeViewController.swift; sourceTree = "<group>"; };
 		7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
@@ -219,6 +221,7 @@
 				7C3973DF1D484AF10003771B /* ViewController.swift */,
 				7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */,
 				7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */,
+				7C8980681D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift */,
 				7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */,
 				7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */,
 			);
@@ -464,6 +467,7 @@
 				7C3BDB941D485F27007D4AE1 /* FilmDataBaseDelegate.swift in Sources */,
 				7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */,
 				7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */,
+				7C8980691D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift in Sources */,
 				7C3973E01D484AF10003771B /* ViewController.swift in Sources */,
 				7CF4CF5B1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift in Sources */,
 				7C40F3151D5D91BF00724F00 /* SuperSwipeableCardView.swift in Sources */,

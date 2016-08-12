@@ -10,7 +10,14 @@ import UIKit
 import Darwin
 
 
-class MasterSwipeViewController: UIViewController {
+class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerDelegate {
+  /*  Master SwipeViewController is the main view controller of the cinefile
+        ~ it controlls the loading and removing of Child ViewControllers in the form of swipeable cards
+        ~ as such it determines weather or not to display tips, user log in, films or advertisments and in which order
+  */
+  
+  
+  
   
   let ASPECT_RATIO_OF_CARD: CGFloat = 1.49
   let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.60
@@ -39,7 +46,7 @@ class MasterSwipeViewController: UIViewController {
   
   func updateViews() {
     // Show and hide the child views
-    filmCardViewController.view.hidden = false
+        filmCardViewController.view.hidden = false
    }
   
   // MARK: - User Login
@@ -74,7 +81,6 @@ class MasterSwipeViewController: UIViewController {
     view.addSubview(viewController.view)
     
     // Configure child View
-    // MARK: - NOTE: need to have create card frame function
     let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO
     let cardWidth = cardHeight / ASPECT_RATIO_OF_CARD
     let cardFrame = CGRectMake(
@@ -104,7 +110,6 @@ class MasterSwipeViewController: UIViewController {
     view.addSubview(viewController.view)
     
     // Configure child View
-    // MARK: - NOTE: need to have create card frame function
     let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO
     let cardWidth = cardHeight / ASPECT_RATIO_OF_CARD
     let cardFrame = CGRectMake(
@@ -124,6 +129,8 @@ class MasterSwipeViewController: UIViewController {
     // pass the orgin point to the controller
     viewController.cardOrigin = cardFrame.origin
     viewController.addOverlayView()
+    viewController.addFBLoginButton()
+    viewController.delegate = self
   }
   
   

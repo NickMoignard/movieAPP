@@ -12,6 +12,7 @@ import Firebase
 class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDelegate {
   
   var cardOrigin: CGPoint? = nil
+  var delegate: LoginSwipeableViewControllerDelegate? = nil
   
   let firebase = FirebaseService()
   
@@ -19,8 +20,6 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    addFBLoginButton()
   }
   
   // MARK: - Overlay View
@@ -31,18 +30,13 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
   // MARK: - Facebook Login Button and Delegate Methods
   
   func addFBLoginButton() {
-    
     // Adjust SubView Center
     var center = self.view.center
-    print(center)
-//    print(cardOrigin)
     if let cardOrigin = self.cardOrigin {
       center.x -= cardOrigin.x
       center.y -= cardOrigin.y
-      print(center)
     }
-    
-    
+
     let loginView:  FBSDKLoginButton = FBSDKLoginButton()
     self.view.addSubview(loginView)
     loginView.center = center
@@ -86,6 +80,7 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
       // If you ask for multiple permissions at once, you
       // should check if specific permissions missing
       firebase.logUserIntoFirebase()
+      self.delegate!.checkIfLoggedIn()
     }
   }
   
