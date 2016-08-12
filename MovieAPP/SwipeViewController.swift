@@ -9,9 +9,7 @@
 import UIKit
 
 class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
-  
-  let movieStuctDummy: Movie? = nil
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
@@ -34,28 +32,35 @@ class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
     // ...
     
   }
-  
-  func createCard(cardToViewRatio: CGFloat, aspectRatio: CGFloat, navBarHeight: CGFloat, tabBarHeight: CGFloat) -> SwipeableCardView {
-    // Initialise a Swipeable Card View
-    
-    let cardHeight = self.view.frame.height * cardToViewRatio
-    let cardWidth = cardHeight / aspectRatio
-    let cardFrame = CGRectMake(
-      self.view.center.x - (cardWidth / 2),
-      self.view.center.y - (cardHeight / 2),
-      cardWidth,
-      cardHeight
-    )
-    
-    let newCard = SwipeableCardView(frame: cardFrame, data: movieStuctDummy)
-    newCard.delegate = self
-    
-    return newCard
-  }
-  
   func cardSwiped () -> Void {
     //  Remove Card from loaded cards index and then if there are more cards to load, load the next card.
+    
   }
+  
+  
+  
+  
+  
+  
+//  func createCard(cardToViewRatio: CGFloat, aspectRatio: CGFloat, navBarHeight: CGFloat, tabBarHeight: CGFloat) -> SwipeableCardView {
+//    // Initialise a Swipeable Card View
+//    
+//    let cardHeight = self.view.frame.height * cardToViewRatio
+//    let cardWidth = cardHeight / aspectRatio
+//    let cardFrame = CGRectMake(
+//      self.view.center.x - (cardWidth / 2),
+//      self.view.center.y - (cardHeight / 2),
+//      cardWidth,
+//      cardHeight
+//    )
+//    
+//    let newCard = SwipeableCardView(frame: cardFrame, data: movieStuctDummy)
+//    newCard.delegate = self
+//    
+//    return newCard
+//  }
+  
+
   
 //  func loadNextCard () -> Void {
 //    //  Takes an initialized CardView from the bufferedCards array and puts it into a seperate array for loadedCards then either inserts it above the Main View or inserts it below a previously loaded CardView.

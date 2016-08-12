@@ -136,8 +136,9 @@ class SwipeableCardView: UIView {
   let ROTATION_STRENGTH = CGFloat(320) // strength of rotation. Higher = weaker rotation
   let ROTATION_ANGLE = CGFloat(M_PI/8) // Higher = stronger rotation angle
   
+  
   func addPanGestureRecognizer () {
-    panGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("beingDragged:"))
+    panGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.beingDraged(_:)))
     self.addGestureRecognizer(panGestureRecognizer)
   }
   
@@ -217,7 +218,7 @@ class SwipeableCardView: UIView {
   
   // MARK: - Show Detail Gesture Recognizer
   func addDoubleTapGestureRecognizer() {
-    let recognizer = UITapGestureRecognizer(target: self, action: "cardDoubleTapped")
+    let recognizer = UITapGestureRecognizer(target: self, action: #selector(self.cardDoubleTapped))
     recognizer.numberOfTapsRequired = 2
     self.addGestureRecognizer(recognizer)
   }

@@ -1,13 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="16A239j" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Master Swipe View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MasterSwipeViewController" id="BYZ-38-t0r" customClass="MasterSwipeViewController" customModule="MovieAPP" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -20,6 +22,97 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-69" y="98"/>
+        </scene>
+        <!--Login Swipeable Card View Controller-->
+        <scene sceneID="inq-dM-DhY">
+            <objects>
+                <viewController storyboardIdentifier="LoginSwipeableCardViewController" id="UBn-fC-wxg" customClass="LoginSwipeableCardViewController" customModule="MovieAPP" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="aLt-4R-upW"/>
+                        <viewControllerLayoutGuide type="bottom" id="RBf-S3-c5c"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="bmH-IT-N83" customClass="SwipeableCardView" customModule="MovieAPP" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cinefile" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="R7o-HV-VxG">
+                                <rect key="frame" x="271" y="28" width="58" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Login Card" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7E7-Id-EwY">
+                                <rect key="frame" x="259" y="57" width="83" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="R7o-HV-VxG" firstAttribute="leading" secondItem="bmH-IT-N83" secondAttribute="leadingMargin" constant="251" id="7Pl-kC-YAO"/>
+                            <constraint firstItem="R7o-HV-VxG" firstAttribute="top" secondItem="aLt-4R-upW" secondAttribute="bottom" constant="8" id="Iwd-LN-tT3"/>
+                            <constraint firstItem="7E7-Id-EwY" firstAttribute="centerX" secondItem="bmH-IT-N83" secondAttribute="centerX" id="NNR-sU-bmg"/>
+                            <constraint firstItem="7E7-Id-EwY" firstAttribute="top" secondItem="R7o-HV-VxG" secondAttribute="bottom" constant="8" id="kmf-pu-tDG"/>
+                            <constraint firstItem="R7o-HV-VxG" firstAttribute="centerX" secondItem="bmH-IT-N83" secondAttribute="centerX" id="w9b-b9-yQZ"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="7Pl-kC-YAO"/>
+                            </mask>
+                        </variation>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Qhe-dQ-QWl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="256" y="786"/>
+        </scene>
+        <!--Film Card View Controller-->
+        <scene sceneID="hUf-oE-VHg">
+            <objects>
+                <viewController storyboardIdentifier="FilmCardViewController" id="qTV-ch-gAz" customClass="FilmCardViewController" customModule="MovieAPP" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bcz-yB-Lep"/>
+                        <viewControllerLayoutGuide type="bottom" id="81n-j6-Lph"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Atv-kp-Mes" customClass="FilmCardView" customModule="MovieAPP" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="David Fincher" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="10" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fE7-Ar-iWy">
+                                <rect key="frame" x="0.5" y="544" width="600" height="48"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" image="fight_club" translatesAutoresizingMaskIntoConstraints="NO" id="9Is-PK-xp4">
+                                <rect key="frame" x="0.0" y="20" width="600" height="516"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="9Is-PK-xp4" firstAttribute="width" secondItem="Atv-kp-Mes" secondAttribute="width" id="2fS-Zk-5yO"/>
+                            <constraint firstItem="fE7-Ar-iWy" firstAttribute="centerX" secondItem="Atv-kp-Mes" secondAttribute="centerX" id="Jb5-aF-sfg"/>
+                            <constraint firstItem="9Is-PK-xp4" firstAttribute="centerX" secondItem="Atv-kp-Mes" secondAttribute="centerX" id="O8x-qY-hOV"/>
+                            <constraint firstItem="9Is-PK-xp4" firstAttribute="top" secondItem="bcz-yB-Lep" secondAttribute="bottom" constant="20" id="Spd-xo-QWO"/>
+                            <constraint firstItem="fE7-Ar-iWy" firstAttribute="width" secondItem="Atv-kp-Mes" secondAttribute="width" id="V1K-Si-1pP"/>
+                            <constraint firstItem="81n-j6-Lph" firstAttribute="top" secondItem="fE7-Ar-iWy" secondAttribute="bottom" constant="8" id="deg-v3-i6Z"/>
+                            <constraint firstItem="81n-j6-Lph" firstAttribute="top" secondItem="9Is-PK-xp4" secondAttribute="bottom" constant="64" id="pZY-IB-dH1"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="directorLabel" destination="fE7-Ar-iWy" id="LLD-L6-1vi"/>
+                        <outlet property="posterView" destination="9Is-PK-xp4" id="14R-ZA-ueb"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="RDT-ZH-r1g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="612" y="67"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="fight_club" width="300" height="450"/>
+    </resources>
 </document>

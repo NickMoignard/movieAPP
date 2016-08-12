@@ -11,7 +11,7 @@ import SwiftyJSON
 import UIKit
 
 struct Movie {
-  var title: String?, releaseDate: String?, poster: UIImage? = nil, jsonData: JSON
+  var title: String?, releaseDate: String?, director: String?, poster: UIImage? = nil, jsonData: JSON
   var hasPoster: Bool? = nil
   var delegate: FilmDataBaseDelegate
   
@@ -20,12 +20,27 @@ struct Movie {
     title = json["title"].string
     releaseDate = json["release_date"].string
     jsonData = json
-    delegate = dataBaseDelegate
     
-    delegate.getMoviePoster(json, size: "w150") {
-      poster in
-      self.poster = poster
-      completionHandler(self)
+    // Get directors name from credits
+    if let crew_list = json["credits"]["crew"].array {
+      for i in 0...crew_list.count - 1 {
+        if let job = crew_list[i]["job"].string {
+          if job == "Director" {
+            if let film_director = crew_list[i]["name"].string {
+              self.director = film_director
+            }
+          }
+        }
+      }
+    }
+    
+    
+    
+    delegate = dataBaseDelegate
+    delegate.getMoviePoster(json, size: "w300") {
+        poster in
+        self.poster = poster
+        completionHandler(self)
     }
     
   }

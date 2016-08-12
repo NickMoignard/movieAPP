@@ -20,10 +20,21 @@
 		7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB8F1D485977007D4AE1 /* Movie.swift */; };
 		7C3BDB921D485BD0007D4AE1 /* TMDBService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */; };
 		7C3BDB941D485F27007D4AE1 /* FilmDataBaseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */; };
+		7C40F3051D5C6DED00724F00 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C40F3041D5C6DED00724F00 /* FirebaseService.swift */; };
+		7C40F3071D5D823400724F00 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C40F3061D5D823400724F00 /* FBSDKLoginKit.framework */; };
+		7C40F3091D5D839C00724F00 /* LoginSwipeableCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */; };
+		7C40F30B1D5D844A00724F00 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7C40F30A1D5D844A00724F00 /* GoogleService-Info.plist */; };
+		7C40F3121D5D88DA00724F00 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C40F3101D5D88DA00724F00 /* FBSDKCoreKit.framework */; };
+		7C40F3131D5D88DA00724F00 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C40F3111D5D88DA00724F00 /* FBSDKShareKit.framework */; };
+		7C40F3151D5D91BF00724F00 /* SuperSwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */; };
+		7CBB37971D4C2A3E00E76BF1 /* FilmCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */; };
+		7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */; };
 		7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */; };
 		7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */; };
 		7CF4CF5B1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */; };
 		7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */; };
+		7CF4CF621D4ACA0400F956D9 /* FilmCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF611D4ACA0400F956D9 /* FilmCardView.swift */; };
+		7CF4CF641D4ACB7300F956D9 /* SwipeableCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CF4CF631D4ACB7300F956D9 /* SwipeableCardView.xib */; };
 		FDC298DBBBDD81DCDF5AD053 /* Pods_MovieAPP.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18B643D6929F153B232A944C /* Pods_MovieAPP.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,10 +78,22 @@
 		7C3BDB8F1D485977007D4AE1 /* Movie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Movie.swift; sourceTree = "<group>"; };
 		7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TMDBService.swift; sourceTree = "<group>"; };
 		7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmDataBaseDelegate.swift; sourceTree = "<group>"; };
+		7C40F3041D5C6DED00724F00 /* FirebaseService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
+		7C40F3061D5D823400724F00 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = ../../SDKs/FacebookSDK/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSwipeableCardViewController.swift; sourceTree = "<group>"; };
+		7C40F30A1D5D844A00724F00 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
+		7C40F30D1D5D86CC00724F00 /* BridgingHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BridgingHeader.h; sourceTree = "<group>"; };
+		7C40F3101D5D88DA00724F00 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = ../../SDKs/FacebookSDK/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		7C40F3111D5D88DA00724F00 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = ../../SDKs/FacebookSDK/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuperSwipeableCardView.swift; sourceTree = "<group>"; };
+		7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmCardViewController.swift; sourceTree = "<group>"; };
+		7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterSwipeViewController.swift; sourceTree = "<group>"; };
 		7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
 		7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
 		7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardViewDelegate.swift; sourceTree = "<group>"; };
 		7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardOverlayView.swift; sourceTree = "<group>"; };
+		7CF4CF611D4ACA0400F956D9 /* FilmCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmCardView.swift; sourceTree = "<group>"; };
+		7CF4CF631D4ACB7300F956D9 /* SwipeableCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SwipeableCardView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +101,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C40F3131D5D88DA00724F00 /* FBSDKShareKit.framework in Frameworks */,
+				7C40F3071D5D823400724F00 /* FBSDKLoginKit.framework in Frameworks */,
+				7C40F3121D5D88DA00724F00 /* FBSDKCoreKit.framework in Frameworks */,
 				FDC298DBBBDD81DCDF5AD053 /* Pods_MovieAPP.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,21 +159,16 @@
 		7C3973DC1D484AF10003771B /* MovieAPP */ = {
 			isa = PBXGroup;
 			children = (
-				7C3973DD1D484AF10003771B /* AppDelegate.swift */,
-				7C209C841D48533300EE2D64 /* keys */,
-				7C3973DF1D484AF10003771B /* ViewController.swift */,
-				7C3973E11D484AF10003771B /* Main.storyboard */,
-				7C3973E41D484AF10003771B /* Assets.xcassets */,
-				7C3973E61D484AF10003771B /* LaunchScreen.storyboard */,
+				7C40F30A1D5D844A00724F00 /* GoogleService-Info.plist */,
 				7C3973E91D484AF10003771B /* Info.plist */,
-				7C3BDB8D1D485540007D4AE1 /* NetworkOperations.swift */,
-				7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */,
-				7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */,
-				7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */,
-				7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */,
-				7C3BDB8F1D485977007D4AE1 /* Movie.swift */,
-				7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */,
-				7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */,
+				7C40F30D1D5D86CC00724F00 /* BridgingHeader.h */,
+				7C3973E41D484AF10003771B /* Assets.xcassets */,
+				7C3973DD1D484AF10003771B /* AppDelegate.swift */,
+				7C40F30C1D5D849700724F00 /* Storyboards_xibs */,
+				7C209C841D48533300EE2D64 /* keys */,
+				7CF4CF5F1D4AC83300F956D9 /* Controller */,
+				7CF4CF601D4AC84300F956D9 /* View */,
+				7CF4CF5E1D4AC81200F956D9 /* Model */,
 			);
 			path = MovieAPP;
 			sourceTree = "<group>";
@@ -170,9 +191,58 @@
 			path = MovieAPPUITests;
 			sourceTree = "<group>";
 		};
+		7C40F30C1D5D849700724F00 /* Storyboards_xibs */ = {
+			isa = PBXGroup;
+			children = (
+				7C3973E11D484AF10003771B /* Main.storyboard */,
+				7C3973E61D484AF10003771B /* LaunchScreen.storyboard */,
+				7CF4CF631D4ACB7300F956D9 /* SwipeableCardView.xib */,
+			);
+			name = Storyboards_xibs;
+			sourceTree = "<group>";
+		};
+		7CF4CF5E1D4AC81200F956D9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7C40F3041D5C6DED00724F00 /* FirebaseService.swift */,
+				7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */,
+				7C3BDB8F1D485977007D4AE1 /* Movie.swift */,
+				7C3BDB8D1D485540007D4AE1 /* NetworkOperations.swift */,
+				7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		7CF4CF5F1D4AC83300F956D9 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7C3973DF1D484AF10003771B /* ViewController.swift */,
+				7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */,
+				7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */,
+				7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */,
+				7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		7CF4CF601D4AC84300F956D9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */,
+				7CF4CF611D4ACA0400F956D9 /* FilmCardView.swift */,
+				7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */,
+				7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */,
+				7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		C9368B5F2E3E777063EE2EA5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7C40F3101D5D88DA00724F00 /* FBSDKCoreKit.framework */,
+				7C40F3111D5D88DA00724F00 /* FBSDKShareKit.framework */,
+				7C40F3061D5D823400724F00 /* FBSDKLoginKit.framework */,
 				18B643D6929F153B232A944C /* Pods_MovieAPP.framework */,
 			);
 			name = Frameworks;
@@ -200,6 +270,7 @@
 				7C3973D81D484AF10003771B /* Resources */,
 				7B649FCB1C151435E1DB8DD9 /* Embed Pods Frameworks */,
 				310822E31C647F3ED37E751A /* Copy Pods Resources */,
+				7CF7254F1D5869EE00B41B5A /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -296,8 +367,10 @@
 			files = (
 				7C39740C1D484D5F0003771B /* keys.plist in Resources */,
 				7C3973E81D484AF10003771B /* LaunchScreen.storyboard in Resources */,
+				7CF4CF641D4ACB7300F956D9 /* SwipeableCardView.xib in Resources */,
 				7C3973E51D484AF10003771B /* Assets.xcassets in Resources */,
 				7C3973E31D484AF10003771B /* Main.storyboard in Resources */,
+				7C40F30B1D5D844A00724F00 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +436,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MovieAPP/Pods-MovieAPP-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		7CF7254F1D5869EE00B41B5A /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Fabric/run\" 21879045719d8605b214835a6ec879d404b9fd42 3ae76a0a5948badbc365ffab63183f5dc72b16901408a0e7a9449d819a4175fb\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -371,13 +457,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C3BDB921D485BD0007D4AE1 /* TMDBService.swift in Sources */,
+				7CBB37971D4C2A3E00E76BF1 /* FilmCardViewController.swift in Sources */,
+				7C40F3051D5C6DED00724F00 /* FirebaseService.swift in Sources */,
 				7C3BDB8E1D485540007D4AE1 /* NetworkOperations.swift in Sources */,
+				7C40F3091D5D839C00724F00 /* LoginSwipeableCardViewController.swift in Sources */,
 				7C3BDB941D485F27007D4AE1 /* FilmDataBaseDelegate.swift in Sources */,
 				7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */,
 				7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */,
 				7C3973E01D484AF10003771B /* ViewController.swift in Sources */,
 				7CF4CF5B1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift in Sources */,
+				7C40F3151D5D91BF00724F00 /* SuperSwipeableCardView.swift in Sources */,
 				7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */,
+				7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */,
+				7CF4CF621D4ACA0400F956D9 /* FilmCardView.swift in Sources */,
 				7C39740E1D484D9F0003771B /* keysUtility.swift in Sources */,
 				7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */,
 				7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */,
@@ -523,10 +615,28 @@
 			baseConfigurationReference = 2B7790A77A3561808509236B /* Pods-MovieAPP.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Crashlytics/iOS\"",
+					"\"${PODS_ROOT}/Fabric/iOS\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleInterchangeUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleNetworkingUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleParsingUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSymbolUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleUtilities/Frameworks\"",
+					"/Users/NLM-Macbook/google-drive/Coding/iOS/SDKs/FacebookSDK/**",
+					"$(PROJECT_DIR)/MovieAPP",
+				);
 				INFOPLIST_FILE = MovieAPP/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NLM.MovieAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/NLM-Macbook/google-drive/Coding/iOS/Projects/MovieAPP/MovieAPP/BridgingHeader.h";
 			};
 			name = Debug;
 		};
@@ -535,10 +645,28 @@
 			baseConfigurationReference = 4C47926B41FCDF6943CF1E97 /* Pods-MovieAPP.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ENABLE_BITCODE = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Crashlytics/iOS\"",
+					"\"${PODS_ROOT}/Fabric/iOS\"",
+					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/FirebaseAuth/Frameworks/frameworks\"",
+					"\"${PODS_ROOT}/FirebaseDatabase/Frameworks\"",
+					"\"${PODS_ROOT}/FirebaseInstanceID/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleInterchangeUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleNetworkingUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleParsingUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleSymbolUtilities/Frameworks\"",
+					"\"${PODS_ROOT}/GoogleUtilities/Frameworks\"",
+					"/Users/NLM-Macbook/google-drive/Coding/iOS/SDKs/FacebookSDK/**",
+					"$(PROJECT_DIR)/MovieAPP",
+				);
 				INFOPLIST_FILE = MovieAPP/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.NLM.MovieAPP;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "/Users/NLM-Macbook/google-drive/Coding/iOS/Projects/MovieAPP/MovieAPP/BridgingHeader.h";
 			};
 			name = Release;
 		};
