@@ -28,9 +28,31 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   override func viewDidLoad() {
       super.viewDidLoad()
       setupView()
-//      initialSetup()
+//    initialSetup()
       checkIfLoggedIn()
-      // Do any additional setup after loading the view.
+
+    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.PopularityDesc, minVoteAvg: 5.0, genre: nil, year: nil)
+    
+    tMDB.updateSearchParametersWithCorrectPageNo(searchParams) {
+      correctSearchParameters in
+      print("updated search parameterswithCorrectPageNo")
+      print(correctSearchParameters)
+      self.tMDB.getPageOfTMDBDiscoverData(correctSearchParameters){
+        json in
+        print("we got here")
+        print(json)
+      }
+    }
+  }
+  
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(true)
+    print("sleep begin")
+    sleep(3)
+    print("sleep end")
+    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.RevenueDesc, minVoteAvg: 8, genre: nil, year: nil)
+    firebase.saveSearch(nil, searchParameters: searchParams)
+    
   }
 
   override func didReceiveMemoryWarning() {

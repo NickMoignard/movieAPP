@@ -5,7 +5,7 @@
 //  Created by Nicholas Moignard on 28/7/16.
 //  Copyright © 2016 Elena. All rights reserved.
 //
-
+import Foundation
 import UIKit
 
 class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
@@ -28,15 +28,24 @@ class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
     // ...
     cardSwiped()
   }
+  
   func showDetail(card: SwipeableCardView) {
     // ...
-    
   }
+  
   func cardSwiped () -> Void {
     //  Remove Card from loaded cards index and then if there are more cards to load, load the next card.
     
   }
   
+  func determineAction(viewController: AnyObject) {
+    // ...
+    let viewControllerMirror = Mirror(reflecting: viewController)
+  }
+  
+  /*  send self to delegate
+      where the delegate will determine what the card is with istype() function and a switch statement
+  */
   
   
   
