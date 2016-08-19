@@ -16,6 +16,13 @@
       initFilmFromID(id: Int, completionHandler: (Movie?) -> Void) -> Void
       getMoviePoster(id: String) -> Void
       getPageOfTMDBDiscoverData(searchParameters: [String: AnyObject], completionHandler: (JSON) -> Void) -> Void
+ 
+ 
+ 
+ 
+ 
+    Future Updates:
+ 
 */
 
 
@@ -125,7 +132,7 @@ struct TMDBService: FilmDataBaseDelegate {
     if (year != nil) { search.updateValue(year!, forKey: "year") }
     
     // Add number of search parameters for specific firebase querying
-    let lengthOfDict = search.count + 1
+    let lengthOfDict = search.count + 2
     search.updateValue(lengthOfDict, forKey: "no_params")
     
     return search
@@ -135,10 +142,9 @@ struct TMDBService: FilmDataBaseDelegate {
     /* Prepare search parameters for url encoding in a request to tmdb api  */
     var search = fbSearchObject
     
-    print("check vote_avg section")
+
     // Fix vote_average.gte key
     if let vote_avg = search["vote_averageGTE"] {
-      print("vote_avg = \(vote_avg)")
       // vote avg key exists
       search.removeValueForKey("vote_averageGTE")
       search.updateValue(vote_avg, forKey: "vote_average.gte")
@@ -183,7 +189,7 @@ struct TMDBService: FilmDataBaseDelegate {
   }
   
   func updateSearchParametersWithCorrectPageNo(searchParameters: [String: AnyObject], completionHandler: ([String: AnyObject] -> Void)) {
-    /*  */
+    /* Before adding any additional search objects to a users firebase, check that they do not exist yet and update accordingly */
     
     // Create the path to users previous searches inside firebase
     if let user = FIRAuth.auth()?.currentUser {
@@ -196,19 +202,23 @@ struct TMDBService: FilmDataBaseDelegate {
       params.removeValueForKey("page")
       
       // Get search history from firebase
-      firebase.getObjectFromFirebaseWithKeyValuePairs(path, dictionary: searchParameters) {
-        (fbData) in
-        if let fbData = fbData {
-          let (search_uid, search) = fbData.first!
-          var searchDict = search as! [String: AnyObject]
+      firebase.getSearchFromFirebaseWithExactKeyValuePairs(path, dictionary: params) {
+        (optTuple) in
+        if let searchTuple = optTuple {  // The search returned a result
+          
+          // Parse Firebase data
+          let (search_uid, search) = searchTuple
+          var searchDict = search
+          
           print(searchDict)
+          
           // Increment results page number
           if let pageNo = searchDict["page"]{
             let page = pageNo as! Int + 1
             searchDict.updateValue(page, forKey: "page")
           }
           
-          self.firebase.saveSearch(search_uid, searchParameters: searchDict)
+          self.firebase._saveSearch(search_uid, searchParameters: searchDict)
           
           completionHandler(searchDict)
           
@@ -217,7 +227,7 @@ struct TMDBService: FilmDataBaseDelegate {
           var searchDict = searchParameters
           searchDict.updateValue(1, forKey: "page")
           
-          self.firebase.saveSearch(nil, searchParameters: searchDict)
+          self.firebase._saveSearch(nil, searchParameters: searchDict)
           completionHandler(searchDict)
         }
       }

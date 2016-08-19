@@ -20,7 +20,7 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   
   
   let ASPECT_RATIO_OF_CARD: CGFloat = 1.49
-  let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.60
+  let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.50
   
   let tMDB = TMDBService()
   let firebase = FirebaseService()
@@ -28,30 +28,21 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   override func viewDidLoad() {
       super.viewDidLoad()
       setupView()
-//    initialSetup()
       checkIfLoggedIn()
 
-    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.PopularityDesc, minVoteAvg: 5.0, genre: nil, year: nil)
+    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.PopularityDesc, minVoteAvg: 6.9, genre: Genre.Action, year: 2011)
     
     tMDB.updateSearchParametersWithCorrectPageNo(searchParams) {
       correctSearchParameters in
-      print("updated search parameterswithCorrectPageNo")
-      print(correctSearchParameters)
       self.tMDB.getPageOfTMDBDiscoverData(correctSearchParameters){
         json in
-        print("we got here")
-        print(json)
+        print("json returned from tmdb api")
       }
     }
   }
   
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(true)
-    print("sleep begin")
-    sleep(3)
-    print("sleep end")
-    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.RevenueDesc, minVoteAvg: 8, genre: nil, year: nil)
-    firebase.saveSearch(nil, searchParameters: searchParams)
     
   }
 
