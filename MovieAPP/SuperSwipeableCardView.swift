@@ -1,10 +1,15 @@
-//
-//  SuperSwipeableCardView.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 12/8/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
+/*
+  SuperSwipeableCardView.swift
+  MovieAPP
+
+  Created by Nicholas Moignard on 12/8/16.
+
+  Synopsis:
+  Data Members:
+  Mehtods:
+  Developer Notes:
+ 
+ */
 
 import UIKit
 

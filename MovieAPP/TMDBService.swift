@@ -2,26 +2,107 @@
    MovieAPP
  
    Created by Nicholas Moignard on 27/7/16.
-   Copyright © 2016 Elena. All rights reserved.
+ 
  
   Synopsis:
       class to interact with the film data base api
   
-   Data members:
-      baseURL
-      baseImageURL
-  
-   Methods:
-      getImage(path: String, size: String = "default size", completionHandler: (UIImage?) -> Void) -> Void
-      initFilmFromID(id: Int, completionHandler: (Movie?) -> Void) -> Void
-      getMoviePoster(id: String) -> Void
-      getPageOfTMDBDiscoverData(searchParameters: [String: AnyObject], completionHandler: (JSON) -> Void) -> Void
+    Data members:
+      MIN_BUFFER:
+        Constant, Minimum number of films in buffer before downloading more data
+        from The Movie Database (tmdb).
  
+      BUFFER_EMPTY:
+        Constant, Minimum number of films before presenting the user with a
+        loading screen as to prevent the user from swiping to an empty screen.
  
+      BASEURL:
+        Constant, The base url for tmdb api.
  
+      BASEIMAGEURL:
+        Constant, The base url for tmdb image api.
  
+      network:
+        Instance of the networking struct for downloading json and images.
  
-    Future Updates:
+      firebase:
+        Instance of the firebase struct as to cleanly interact with the real
+        time database.
+ 
+      downloadingPageFromTMDB:
+        Flag variable, for determining weather or not to download another page
+        of tmdb data
+ 
+      numberOfDownloadingMovies:
+        Counter, by contrasting the number of films in buffered array and film
+        assets currently downloading we can determine if we need to download
+        more film assets to maintain buffered array length
+ 
+      bufferedMovies:
+        Array of Movie structs with poster images & film metadata downloaded
+ 
+      searchParameters:
+        Dictionary of last known search parameters for a discover request to
+        tmdb. This ensures we keep users films relevant and new.
+ 
+      viewController:
+        Optional delegate for sending a message back to the controller to
+        inform when assets have finished downloading/ ready to load cards into
+        view.
+
+ 
+    Methods:
+ 
+      Initializers
+        ~ init()
+ 
+      Film Buffer Management
+        ~ getNextMovie() -> Movie?
+          /*  Getter method for a single Movie from the buffered array
+          */
+ 
+        ~ checkBufferedMovies()
+          /*  Check & maintain the items within buffered films array
+          */
+        
+        ~ addMoviesToBufferedArray(completionHandler: (String) -> Void) -> Void
+          /* Start the download of a new page of tmdb discover data */
+
+
+      Movie Database API Interaction
+        ~ initFilmFromID(id: Int, completionHandler: (Movie?) -> Void)
+          /*  Download a movies assets for a given film id
+          */
+ 
+        ~ getPageOfTMDBDiscoverData(searchParameters: [String: AnyObject], completionHandler: (JSON) -> Void)
+          /*  Download a page of data from tMDB Discover function
+          */
+ 
+        ~ parseSearchParametersDictForTMDB(fbSearchObject: [String: AnyObject]) -> [String: AnyObject]
+          /*  Prepare search parameters for url encoding in a request to tmdb
+              api
+          */
+ 
+        ~ getMoviePoster(json: JSON, size: String, completionHandler: (UIImage?) -> Void) -> Void
+          /*  Download movie poster from tmdb image api
+          */
+ 
+      Firebase Interaction
+        ~ getUsersMostRecentSearchParameters() -> [String: AnyObject]
+          /*  Getter method for recent search parameters data member
+          */
+ 
+        ~ createSearchParametersDictForFirebase(sorting: Constants.Sorting, minVoteAvg: Float?, genre: Constants.Genre?, year: Int?) -> [String: AnyObject]
+          /*  Build correct search parameters for a tmdb discover .GET request
+          */
+ 
+        ~ updateSearchParametersWithCorrectPageNo(searchParameters: [String: AnyObject], completionHandler: ([String: AnyObject] -> Void))
+          /*  Before adding any additional search objects to a users firebase,
+              check that they do not exist yet and update accordingly
+          */
+ 
+    Development Notes:
+      This Struct is yet to be completed
  
 */
 
@@ -32,81 +113,130 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-enum Sorting: String {
-  case PopularityAsc = "popularity.asc"
-  case PopularityDesc = "popularity.desc"
-  case ReleaseDateAsc = "release_date.asc"
-  case RevenueAsc = "revenue.asc"
-  case RevenueDesc = "revenue.desc"
-  case PrimaryReleaseDateAsc = "primary_release_date.asc"
-  case PrimaryReleaseDateDesc = "primary_release_date.desc"
-  case OriginalTitleAsc = "original_title.asc"
-  case OriginalTitleDesc = "original_title.desc"
-  case VoteAverageAsc = "vote_average.asc"
-  case VoteAverageDesc = "vote_average.desc"
-  case VoteCountAsc = "vote_count.asc"
-  case VoteCountDesc = "vote_count.desc"
-}
-
-enum Genre: Int {
-  case Action = 28
-  case Adventure = 12
-  case Animation = 16
-  case Comedy = 35
-  case Crime = 80
-  case Documentary = 99
-  case Drama = 18
-  case Family = 10751
-  case Fantasy = 14
-  case Foreign = 10769
-  case History = 36
-  case Horror = 27
-  case Music = 10402
-  case Mystery = 9648
-  case Romance = 10749
-  case ScienceFiction = 878
-  case TVMovie = 10770
-  case Thriller = 53
-  case War = 10752
-  case Western = 37
-}
-
-struct TMDBService: FilmDataBaseDelegate {
-  let MIN_BUFFER: Int = 10
-  let BUFFER_EMPTY: Int = 1
-  let baseURL = NSURL(string: "https://api.themoviedb.org")!
-  let baseImageURL = NSURL(string: "https://image.tmdb.org/t/p/")!
-  let api = NetworkOperation()
-  let firebase = FirebaseService()
+class TMDBService: FilmDataBaseDelegate {
   
-  var downloadingPageFromTMDB: Bool = false
-  var numberOfDownloadingMovies: Int = 0
-  var bufferedMovies = [Movie]()
-  var searchParameters: [String: AnyObject]? = nil
+ 
+  // MARK: - Variable, Constant Declarations
+  
+  let MIN_BUFFER: Int = 10,
+      BUFFER_EMPTY: Int = 1,
+      BASEURL = NSURL(string: "https://api.themoviedb.org")!,
+      BASEIMAGEURL = NSURL(string: "https://image.tmdb.org/t/p/")!
+  
+  let network = NetworkOperation(),
+      firebase = FirebaseService()
+  
+  var downloadingPageFromTMDB: Bool = false,
+      numberOfDownloadingMovies: Int = 0,
+      bufferedMovies: [Movie] = [],
+      searchParameters: [String: AnyObject]? = nil,
+      viewController: MasterSwipeViewControllerDelegate? = nil
+  
+  
+  // MARK: - Initializers
   
   init() {
-    print("init call from tmdbservice")
-    firebase.getMostRecentSearch() {
-      (searchDict) in
-      // This completionHandler will get executed everytime the user saves a new search
-      print("\nhopefully i see this line 2wice\n")
-      self.searchParameters = searchDict
-    }
+    // ...
   }
 
   
-  func initFilmFromID(id: Int, completionHandler: (Movie?) -> Void) {
+  // MARK: - Film Buffer Management
+  
+  func getNextMovie() -> Movie? {
+    print("getting movie from buffer")
+    /* Getter method for a single Movie from the buffered array */
+    
+    self.checkBufferedMovies()
+    let movie = self.bufferedMovies.removeFirst()
+    return movie
+  }
+  
+  func checkBufferedMovies() {
+    print("checking buffered movies")
+    /* Check & maintain the items within buffered films array */
+    
+    // Get current state of the array and downloads
+    let lengthBufferedArray = self.bufferedMovies.count
+    let noFilmsDownloading = self.numberOfDownloadingMovies
+    let buffer: Int = lengthBufferedArray + noFilmsDownloading
+    
+    // Start additional downloads & present user with loading screen if needed
+    if (buffer <= BUFFER_EMPTY) {
+      // Present the loading card and wait until buffer reaches minimum count
+      self.addMoviesToBufferedArray({ _ in })
+    } else if buffer < MIN_BUFFER && !downloadingPageFromTMDB {
+      self.addMoviesToBufferedArray({_ in })
+    }
+  }
+  
+  func addMoviesToBufferedArray(completionHandler: (finished: Bool) -> Void) {
+    /* Start the download of a new page of tmdb discover data */
+    print("adding movies to buffered array")
+    // Get off main queue
+    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
+    dispatch_async(dispatch_get_global_queue(priority, 0)) {
+      
+      // Get search parameters
+      let params = self.getUsersMostRecentSearchParameters()
+      self.updateSearchParametersWithCorrectPageNo(params) {
+        correctSearchParameters in
+        
+        // Download page of films
+        self.getPageOfTMDBDiscoverData(correctSearchParameters){
+          json in
+          if let array = json["results"].array {
+            var numResults = array.count
+            // Check each film against previously seen films
+            array.forEach({
+              (movieJSON) in
+              if let filmID = movieJSON["id"].int {
+                self.firebase.checkIdAgainstUsersHistory(filmID) {
+                  (unseen) in
+                  if unseen {
+                    
+                    // Download film assets
+                    self.numberOfDownloadingMovies += 1
+                    let _ = Movie(json: movieJSON, dataBaseDelegate: self) {
+                      movie in
+                      
+                      // get back on main queue and add films to buffer
+                      dispatch_async(dispatch_get_main_queue()) {
+                        self.numberOfDownloadingMovies -= 1
+                        numResults -= 1
+                        self.bufferedMovies.append(movie)
+                        
+                        // let viewController know if all films are finished downloading
+                        if (self.numberOfDownloadingMovies < 1) && (numResults == 0)  {
+                          completionHandler(finished: true)
+                        }
+                      }
+                    }
+                  } else {  // already seen the film
+                    numResults -= 1
+                  }
+                }
+              }
+            })
+          }
+        }
+      }
+    }
+  }
+  
+  // MARK: - Movie Database API Interaction
+  
+  func initMovieFromID(id: Int, completionHandler: (Movie?) -> Void) {
     /* Download a movies assets for a given film id */
     
     // Construct URL
-    let url = NSURL(string: "3/movie/\(id)", relativeToURL: self.baseURL)!
+    let url = NSURL(string: "3/movie/\(id)", relativeToURL: self.BASEURL)!
     let urlParameters = [
       "api_key": "\(getAPIKey("tMDB"))",
       "append_to_response": "credits"
     ]
     
     // Download data - Create Movie Struct with json object
-    api.downloadJSONFromURL(url, parameters: urlParameters) {
+    network.downloadJSONFromURL(url, parameters: urlParameters) {
       json in
       if let json = json {
         let _ = Movie(json: json, dataBaseDelegate: self) {
@@ -117,7 +247,66 @@ struct TMDBService: FilmDataBaseDelegate {
     }
   }
   
-  func createSearchParametersDictForFirebase(sorting: Sorting, minVoteAvg: Float?, genre: Genre?, year: Int?) -> [String: AnyObject] {
+  func getPageOfTMDBDiscoverData(searchParameters: [String: AnyObject], completionHandler: (JSON) -> Void) {
+    /*  Download a page of data from tMDB Discover function */
+    
+    // Construct url
+    let url = NSURL(string: "3/discover/movie", relativeToURL: self.BASEURL)!
+    let urlParameters = parseSearchParametersDictForTMDB(searchParameters)
+    
+    // Download data
+    network.downloadJSONFromURL(url, parameters: urlParameters) {
+      json in
+      if let json = json {
+        completionHandler(json)
+      }
+    }
+  }
+  
+  func parseSearchParametersDictForTMDB(fbSearchObject: [String: AnyObject]) -> [String: AnyObject] {
+    /* Prepare search parameters for url encoding in a request to tmdb api  */
+    var search = fbSearchObject
+  
+    // Fix vote_average.gte key
+    if let vote_avg = search["vote_averageGTE"] {
+      // vote avg key exists
+      search.removeValueForKey("vote_averageGTE")
+      search.updateValue(vote_avg, forKey: "vote_average.gte")
+    }
+  
+    // Remove extranuous pairs
+    search.removeValueForKey("no_params")
+    search.removeValueForKey("timestamp")
+  
+    // Add API Key
+    search.updateValue("\(getAPIKey("tMDB"))", forKey: "api_key")
+  
+    return search
+  }
+  
+  func getMoviePoster(json: JSON, size: String, completionHandler: (UIImage?) -> Void) -> Void {
+    /* Download movie poster from tmdb image api */
+    if let path = json["poster_path"].string {
+      let url = NSURL(string: "\(size)/\(path)", relativeToURL: self.BASEIMAGEURL)!
+      self.network.downloadImageFromURL(url) {
+        poster in
+        completionHandler(poster)
+      }
+    }
+  }
+  
+  // MARK: - Firebase Interaction
+  
+  func getUsersMostRecentSearchParameters() -> [String: AnyObject] {
+    /* Getter method for recent search parameters data member */
+    if self.searchParameters == nil {
+      print("search parameters got recked")
+      return [String: AnyObject]()
+    }
+    return self.searchParameters!
+  }
+  
+  func createSearchParametersDictForFirebase(sorting: Constants.Sorting, minVoteAvg: Float?, genre: Constants.Genre?, year: Int?) -> [String: AnyObject] {
     /* Build correct search parameters for a tmdb discover .GET request */
     
     // Required Parameters
@@ -136,56 +325,6 @@ struct TMDBService: FilmDataBaseDelegate {
     search.updateValue(lengthOfDict, forKey: "no_params")
     
     return search
-  }
-  
-  func parseSearchParametersDictForTMDB(fbSearchObject: [String: AnyObject]) -> [String: AnyObject] {
-    /* Prepare search parameters for url encoding in a request to tmdb api  */
-    var search = fbSearchObject
-    
-
-    // Fix vote_average.gte key
-    if let vote_avg = search["vote_averageGTE"] {
-      // vote avg key exists
-      search.removeValueForKey("vote_averageGTE")
-      search.updateValue(vote_avg, forKey: "vote_average.gte")
-    }
-    
-    // Remove extranuous pairs
-    search.removeValueForKey("no_params")
-    search.removeValueForKey("timestamp")
-    
-    // Add API Key
-    search.updateValue("\(getAPIKey("tMDB"))", forKey: "api_key")
-
-    
-    return search
-  }
-  
-  
-  func getPageOfTMDBDiscoverData(searchParameters: [String: AnyObject], completionHandler: (JSON) -> Void) {
-    /*  Download a page of data from tMDB Discover function */
-    
-    // Construct url
-    let url = NSURL(string: "3/discover/movie", relativeToURL: self.baseURL)!
-    let urlParameters = parseSearchParametersDictForTMDB(searchParameters)
-    
-    // Download data
-    api.downloadJSONFromURL(url, parameters: urlParameters) {
-      json in
-      if let json = json {
-        completionHandler(json)
-      }
-    }
-  }
-
-  func getMoviePoster(json: JSON, size: String, completionHandler: (UIImage?) -> Void) -> Void {
-    if let path = json["poster_path"].string {
-      let url = NSURL(string: "\(size)/\(path)", relativeToURL: self.baseImageURL)!
-      self.api.downloadImageFromURL(url) {
-        poster in
-        completionHandler(poster)
-      }
-    }
   }
   
   func updateSearchParametersWithCorrectPageNo(searchParameters: [String: AnyObject], completionHandler: ([String: AnyObject] -> Void)) {
@@ -235,61 +374,7 @@ struct TMDBService: FilmDataBaseDelegate {
   }
   
   
-//    mutating func addMoviesToBufferedArray() {
-//      // start download of a new page of tmdb discover data and add this to buffered films array
-//      let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-//      dispatch_async(dispatch_get_global_queue(priority, 0)) {
-//        self.getSearchParameters(nil) {
-//          searchParams in
-//          self.getPageOfTMDBDiscoverData(searchParams) {
-//            json in
-//            if let array = json["results"].array {
-//              let unseenFilmsJSONArray = array.filter() {
-//                movieJSON in
-//                if let filmID = movieJSON["id"].int {
-//                  return self.firebase.checkIdAgainstUsersHistory(filmID)
-//                } else {
-//                  return false
-//                }
-//              }
-//  
-//              self.numberOfDownloadingMovies = unseenFilmsJSONArray.count
-//  
-//              unseenFilmsJSONArray.forEach() {
-//                jsonFilm in
-//                let _ = Movie(json: jsonFilm, dataBaseDelegate: self) {
-//                  movie in
-//                  self.numberOfDownloadingMovies -= 1
-//                  self.bufferedMovies.append(movie)
-//                }
-//              }
-//            }
-//          }
-//        }
-//      }
-//    }
+  // MARK: - Unfinished Work
   
   
-//  mutating func checkBufferedMovies() {
-//    // maintain the movies buffer
-//    let lengthBufferedArray: Int = 0
-//    let noFilmsDownloading: Int = 0
-//    let buffer: Int = lengthBufferedArray + noFilmsDownloading
-//    
-//    if (buffer <= BUFFER_EMPTY) {
-//      // Present the loading card and wait until buffer reaches minimum count
-//      self.addMoviesToBufferedArray()
-//      
-//    } else if buffer < MIN_BUFFER && !downloadingPageFromTMDB {
-//      self.addMoviesToBufferedArray()
-//    }
-//  }
-  
-//  mutating func getNextFilmInBuffer() -> Movie? {
-//    // Get first element from the Movie Struct Array
-//    checkBufferedMovies()
-//    return bufferedMovies.removeFirst()
-//  }
-  
-
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C3730581D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */; };
+		7C37305C1D6D5573005C68B0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C37305B1D6D5573005C68B0 /* Constants.swift */; };
 		7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3973DD1D484AF10003771B /* AppDelegate.swift */; };
 		7C3973E01D484AF10003771B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3973DF1D484AF10003771B /* ViewController.swift */; };
 		7C3973E31D484AF10003771B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C3973E11D484AF10003771B /* Main.storyboard */; };
@@ -61,6 +63,8 @@
 		18B643D6929F153B232A944C /* Pods_MovieAPP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieAPP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7790A77A3561808509236B /* Pods-MovieAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieAPP/Pods-MovieAPP.debug.xcconfig"; sourceTree = "<group>"; };
 		4C47926B41FCDF6943CF1E97 /* Pods-MovieAPP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieAPP.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieAPP/Pods-MovieAPP.release.xcconfig"; sourceTree = "<group>"; };
+		7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterSwipeViewControllerDelegate.swift; sourceTree = "<group>"; };
+		7C37305B1D6D5573005C68B0 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		7C3973DA1D484AF10003771B /* MovieAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3973DD1D484AF10003771B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C3973DF1D484AF10003771B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -208,6 +212,7 @@
 		7CF4CF5E1D4AC81200F956D9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7C37305B1D6D5573005C68B0 /* Constants.swift */,
 				7C6612041D604B2B0007F0E3 /* notes on cienfile from work */,
 				7C40F3041D5C6DED00724F00 /* FirebaseService.swift */,
 				7C3BDB931D485F27007D4AE1 /* FilmDataBaseDelegate.swift */,
@@ -227,6 +232,7 @@
 				7C8980681D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift */,
 				7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */,
 				7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */,
+				7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -235,10 +241,10 @@
 			isa = PBXGroup;
 			children = (
 				7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */,
+				7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */,
 				7CF4CF611D4ACA0400F956D9 /* FilmCardView.swift */,
 				7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */,
 				7CF4CF5A1D49BE3500F956D9 /* SwipeableCardViewDelegate.swift */,
-				7C40F3141D5D91BF00724F00 /* SuperSwipeableCardView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -478,6 +484,8 @@
 				7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */,
 				7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */,
 				7CF4CF621D4ACA0400F956D9 /* FilmCardView.swift in Sources */,
+				7C37305C1D6D5573005C68B0 /* Constants.swift in Sources */,
+				7C3730581D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift in Sources */,
 				7C39740E1D484D9F0003771B /* keysUtility.swift in Sources */,
 				7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */,
 				7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */,

@@ -1,10 +1,20 @@
-//
-//  NetworkOperations.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 27/7/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
+
+
+
+
+
+/*
+  MovieAPP
+  NetworkOperations.swift
+  Created by Nicholas Moignard on 27/7/16.
+  
+  Synopsis:
+  Data Members:
+  Mehtods:
+  Developer Notes:
+ 
+ */
+
 
 import Foundation
 import Alamofire

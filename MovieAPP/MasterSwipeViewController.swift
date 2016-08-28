@@ -1,43 +1,47 @@
-//
-//  MasterDummyViewController.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 30/7/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
+/*
+ MasterDummyViewController.swift
+ MovieAPP
+ 
+ Created by Nicholas Moignard on 30/7/16.
+ 
+ Synopsis:
+ Data Members:
+ Mehtods:
+ Developer Notes:
+ 
+ */
 
 import UIKit
 import Darwin
 
 
-class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerDelegate {
+class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerDelegate, MasterSwipeViewControllerDelegate {
   /*  Master SwipeViewController is the main view controller of the cinefile
         ~ it controlls the loading and removing of Child ViewControllers in the form of swipeable cards
         ~ as such it determines weather or not to display tips, user log in, films or advertisments and in which order
   */
   
   
+  // list of cards in view
+  var childrenViewControllersInView = [FilmCardViewController]()
   
-  
+  let INITIAL_NO_CARDS = 3
   let ASPECT_RATIO_OF_CARD: CGFloat = 1.49
-  let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.50
+  let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.8
   
-  let tMDB = TMDBService()
+  var tMDB = TMDBService()
   let firebase = FirebaseService()
-
+  
   override func viewDidLoad() {
       super.viewDidLoad()
       setupView()
       checkIfLoggedIn()
-
-    let searchParams = tMDB.createSearchParametersDictForFirebase(Sorting.PopularityDesc, minVoteAvg: 6.9, genre: Genre.Action, year: 2011)
-    
-    tMDB.updateSearchParametersWithCorrectPageNo(searchParams) {
-      correctSearchParameters in
-      self.tMDB.getPageOfTMDBDiscoverData(correctSearchParameters){
-        json in
-        print("json returned from tmdb api")
-      }
+      tMDB.viewController = self
+      tMDB.addMoviesToBufferedArray() {
+        _ in
+        print("\(self.tMDB.bufferedMovies.count)")
+        self.initialSetup()  // begin loading films into the view
+        
     }
   }
   
@@ -59,7 +63,7 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   
   func updateViews() {
     // Show and hide the child views
-        filmCardViewController.view.hidden = false
+        filmCardViewController.view.hidden = true
    }
   
   // MARK: - User Login
@@ -75,36 +79,33 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
     }
   }
   
-  
-  
-  
-  
-  
-  
-  
-  
+  func loadFilmCards() {
+    print("Delegate method call worked")
+  }
   
   // MARK: - ViewControllers as Children
   
   private func addViewControllerAsChildViewController(viewController: FilmCardViewController) {
+    /*
+    */
     // Add child ViewController
     addChildViewController(viewController)
     
-    // Ad child View as subview
+    // Add child View as subview
     view.addSubview(viewController.view)
     
     // Configure child View
-    let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO
-    let cardWidth = cardHeight / ASPECT_RATIO_OF_CARD
-    let cardFrame = CGRectMake(
+    let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO,
+        cardWidth = cardHeight / ASPECT_RATIO_OF_CARD,
+        cardFrame = CGRectMake(
       self.view.center.x - (cardWidth / 2),
       self.view.center.y - (cardHeight / 2),
       cardWidth,
       cardHeight
     )
-      
+    
+    // Set frame and resizing mask
     viewController.view.frame = cardFrame
-      
     viewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
       
     // Notify child ViewController
@@ -116,16 +117,14 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   }
   
   private func addViewControllerAsChildViewController(viewController: LoginSwipeableCardViewController) {
-    // Add child ViewController
+    /*
+    */
     addChildViewController(viewController)
-    
-    // Ad child View as subview
     view.addSubview(viewController.view)
-    
-    // Configure child View
-    let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO
-    let cardWidth = cardHeight / ASPECT_RATIO_OF_CARD
-    let cardFrame = CGRectMake(
+
+    let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO,
+        cardWidth = cardHeight / ASPECT_RATIO_OF_CARD,
+        cardFrame = CGRectMake(
       self.view.center.x - (cardWidth / 2),
       self.view.center.y - (cardHeight / 2),
       cardWidth,
@@ -133,13 +132,10 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
     )
     
     viewController.view.frame = cardFrame
-    
     viewController.view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-    
-    // Notify child ViewController
     viewController.didMoveToParentViewController(self)
     
-    // pass the orgin point to the controller
+    // Set information in viewController
     viewController.cardOrigin = cardFrame.origin
     viewController.addOverlayView()
     viewController.addFBLoginButton()
@@ -161,96 +157,25 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   
   
   // MARK: - Card Stack
-  
-  var fincherList = [550, 807, 1949, 2649, 4547, 8077, 37799, 65754, 210577]
 
-  // list of cards to be downloaded
-  var listOfFilmsFromFirebase = [Int]()
-  
-  // list of cards downloaded and instantiated
-  var bufferedViewControllers = [FilmCardViewController]()
-  
-  // list of cards in view
-  var childrenViewControllersInView = [FilmCardViewController]()
+
   
   func initialSetup() {
-    let INITIAL_NO_CARDS = 3
-    var completions = 0
-    
-    for _ in 0..<INITIAL_NO_CARDS {
-      self.getNextFilmCardViewController() {
-        viewController in
-        
-        self.bufferedViewControllers.append(viewController)
-        
-        if completions <= 3 {
-            self.addViewControllerFromBufferedArrayAsAChild()
-        }
-        
-        completions += 1
-      }
-    }
-    
-    
-  }
-  
-  // MARK: - Manage Buffered Array
-
-  func addViewControllerFromBufferedArrayAsAChild() {
-    // pop viewcontroller
-    if let viewController = self.bufferedViewControllers.popLast() {
+    /* Helper function, initialize card stack after finished getting assets */
+    for _ in 0..<self.INITIAL_NO_CARDS {
       
-      // add to view
-      self.childrenViewControllersInView.append(viewController)
-      self.addViewControllerAsChildViewController(viewController)
-      
-      // get next filmCardViewController
-      self.getNextFilmCardViewController() {
-        viewController in
+      // Get movie from tmdb service
+      let movie = tMDB.getNextMovie()
+      if let movie = movie {
         
-        // add to array
-        self.bufferedViewControllers.append(viewController)
+        // Add viewController as child
+        let movieVC = self.createFilmCardViewController(movie)
+        self.childrenViewControllersInView.append(movieVC)
+        self.addViewControllerAsChildViewController(movieVC)
       }
     }
   }
-  
-  
-  
-  func getNextFilmCardViewController(completionHandler: (FilmCardViewController) -> Void) {
-    // get off main queue, download film data, get back onto main queue, create view controller, pass viewController into completion handler
-    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-    dispatch_async(dispatch_get_global_queue(priority, 0)) {
-      self.getNextMovieInList() {
-        movie in
-        dispatch_async(dispatch_get_main_queue()) {
-          if let movie = movie {
-            let viewController = self.createFilmCardViewController(movie)
-            completionHandler(viewController)
-          }
-        }
-      }
-    }
-  }
-  
-  // get data and make a card method
-  private func getNextMovieInList( completionHandler: (Movie?) -> Void) {
-    
-    // SHITTY CODE. KEEPS FAILING
-    
-    if fincherList.isEmpty {
-      print("no more films in list")
-      completionHandler(nil)
-    } else {
-      if let nextID = fincherList.popLast() {
-        self.tMDB.initFilmFromID(nextID) {
-          movie in
-          completionHandler(movie)
-        }
-      }
-    }
 
-  }
-  
   private func createFilmCardViewController(movie: Movie) -> FilmCardViewController {
     // Load storyboardfind
     let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())

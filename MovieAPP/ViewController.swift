@@ -1,10 +1,16 @@
-//
-//  ViewController.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 27/7/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
+/*
+ ViewController.swift
+ MovieAPP
+ 
+ Created by Nicholas Moignard on 27/7/16.
+
+ 
+ Synopsis: unecessary view controller
+ Data Members:
+ Mehtods:
+ Developer Notes:
+ 
+ */
 
 import UIKit
 
@@ -21,7 +27,7 @@ class ViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    tmdb.initFilmFromID(550) {
+    tmdb.initMovieFromID(550) {
       data in
       if let movie = data {
         let cardView = self.createCardForView(
@@ -33,30 +39,14 @@ class ViewController: UIViewController {
         )
         self.cardStack.append(cardView)
         self.view.addSubview(cardView)
-        self.cardStack[0].imageView.image = UIImage(named: "fight_club")
-        
+//        self.cardStack[0].imageView.image = UIImage(named: "fight_club")
       }
     }
-    
-    
   }
   
   
   func setupInformationInCardView (data: Movie?) {
     // Load information into Outlets call this method from inside the view controller within the animations completionHandler
-    
-
-  }
-  
-  override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(true)
-    
-    
-  }
-
-  override func didReceiveMemoryWarning() {
-    super.didReceiveMemoryWarning()
-    // Dispose of any resources that can be recreated.
   }
   
   func createCardForView(data: Movie, cardToViewRatio: CGFloat, aspectRatio: CGFloat, navBarHeight: CGFloat, tabBarHeight: CGFloat) -> FilmCardView {

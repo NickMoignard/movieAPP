@@ -1,11 +1,18 @@
-//
-//  LoginSwipeableCardViewController.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 12/8/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
-// when user logs in, need to call a delegate method in the MasterViewController that removes the card from the screen
+/*
+ LoginSwipeableCardViewController.swift
+ MovieAPP
+ 
+ Created by Nicholas Moignard on 12/8/16.
+
+ Synopsis:
+ Data Members:
+ Mehtods:
+ Developer Notes:
+  ~   When user logs in, need to call a delegate method in the
+      MasterViewController that removes the card from the screen
+ 
+ */
+
 import UIKit
 import Firebase
 

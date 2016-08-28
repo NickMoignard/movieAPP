@@ -1,18 +1,19 @@
-//
-//  SwipeableCardView.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 28/7/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
-
-// MARK: - TO DO
-/* ~  MovieStruct & OverlayView are currently Optionals and being forced unwrapped for development speed,
-      but cannot be optionals for a working version of app
+/*
+ SwipeableCardView.swift
+ MovieAPP
  
-   ~  Fix the gesture recognizers Selector Syntax
-*/
-
+ Created by Nicholas Moignard on 28/7/16.
+ 
+ Synopsis:
+ Data Members:
+ Mehtods:
+ Developer Notes:
+    ~   MovieStruct & OverlayView are currently Optionals and being forced unwrapped for development speed,
+        but cannot be optionals for a working version of app
+ 
+    ~  Fix the gesture recognizers Selector Syntax
+ 
+ */
 
 import UIKit
 

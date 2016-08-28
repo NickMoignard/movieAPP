@@ -1,10 +1,16 @@
-//
-//  SwipeViewController.swift
-//  MovieAPP
-//
-//  Created by Nicholas Moignard on 28/7/16.
-//  Copyright © 2016 Elena. All rights reserved.
-//
+/*
+ SwipeViewController.swift
+ MovieAPP
+ 
+ Created by Nicholas Moignard on 28/7/16.
+
+ Synopsis:
+ Data Members:
+ Mehtods:
+ Developer Notes:
+ 
+ */
+
 import Foundation
 import UIKit
 

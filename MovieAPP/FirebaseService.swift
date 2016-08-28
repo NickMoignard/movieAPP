@@ -1,19 +1,17 @@
-//
-//  FirebaseService.swift
-//  Pods
-//
-//  Created by Nicholas Moignard on 11/8/16.
-//
-//
 
-
-
-
-/* 
-  Future Updates:
-    ~ Inside getObjectFromFirebaseWithKeyValuePairs():
+/*
+ MovieAPPFirebaseService.swift
+ 
+ Created by Nicholas Moignard on 27/7/16.
+ 
+ Synopsis:
+ Data Members:
+ Mehtods:
+ Developer Notes:
+  ~ Inside getObjectFromFirebaseWithKeyValuePairs():
         Throw an error if firebase returns with more than one object.
-*/
+ */
+
 
 import Foundation
 import Firebase
@@ -32,12 +30,15 @@ class FirebaseService {
       ref.child("viewed_cards/\(user.uid)/\(filmID)").observeSingleEventOfType(FIRDataEventType.Value, withBlock: {
         (snapshot) in
         // card seen
-        print("film no. \(filmID) has been seen \n\(snapshot)")
-        completionHandler(false)
+        if snapshot.value is NSNull {
+//          print("film is unseen")
+          completionHandler(true)
+        } else {
+          print("film no. \(filmID) has been seen \n\(snapshot)")
+          completionHandler(false)
+        }
       }) {
         (error) in
-        // card unseen
-        print("film no. \(filmID) is unseen \n\(error)")
         completionHandler(true)
       }
     } else {
