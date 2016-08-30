@@ -1,22 +1,19 @@
-
-/*
- MovieAPP
- Constants.swift
- Created by Nicholas Moignard on 27/7/16.
- 
- Synopsis:
-  File for storing global constants as to clean up the code base
- 
- Data Members:
- Mehtods:
- Developer Notes:
- 
- */
+//
+//  Constants.swift
+//  
+//  Struct for storing global constants as to clean up the code base
+//
+//  Created by Nicholas Moignard on 24/8/16.
+//
+//
 
 import Foundation
 
 struct Constants {
   
+  // MARK: - Movie Database Constants
+  
+  let ANIMATE_CARD_OUT_DURATION = 0.4
   
   enum Sorting: String {
     case PopularityAsc = "popularity.asc"
@@ -55,6 +52,19 @@ struct Constants {
     case Thriller = 53
     case War = 10752
     case Western = 37
+  }
+  
+  enum Review: String {
+    case Like = "liked"
+    case Dislike = "disliked"
+    case Save = "saved"
+    case Remove = "removed"
+  }
+  
+  // getters
+  
+  func getAnimateOutDuration() -> Double {
+    return self.ANIMATE_CARD_OUT_DURATION
   }
   
 }

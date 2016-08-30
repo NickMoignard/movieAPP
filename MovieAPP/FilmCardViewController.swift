@@ -49,28 +49,28 @@ class FilmCardViewController: SwipeViewController {
   
   var filmCardView: FilmCardView? = nil,
       cardOrgin: CGPoint? = nil,
-      movie: Movie? = nil
+      movie: Movie? = nil,
+      id: Int?
   
   // MARK: - View Setup
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    self.filmCardView = (self.view as! FilmCardView)
-    if let movie = self.movie {
-      loadDataFromMovie(movie)
-    }
+    loadDataFromMovie()
   }
   
-  func loadDataFromMovie(movie: Movie) {
+  func loadDataFromMovie() {
     /* Helper function, updates outlets in the view with movie data.
     */
-    print("trying to load data from movie struct")
-    if let director = movie.director, poster = movie.poster {
-        self.directorLabel.text = director
+    
+    if let movie = self.movie, poster = movie.poster {
+        self.directorLabel.text = movie.title
         self.posterView.image = poster
+        self.id = movie.id
+      
     } else {
-      print("well that didn't work")
+      print("Error: FilmCardView.loadDataFromMovie() Failed ")
     }
   }
   

@@ -5,9 +5,48 @@
  Created by Nicholas Moignard on 30/7/16.
  
  Synopsis:
+    Master SwipeViewController is the main view controller of the cinefile
+ 
+      ~ It controlls the loading and varoving of Child ViewControllers in the
+        form of swipeable cards
+ 
+      ~ As such it determines weather or not to display tips, user log in, films
+        or advertisments and in which order
+ 
+      ~ We present the core card swiping functionality of app in this view. The
+        view controller acts as a parent to each subview (card)
+ 
  Data Members:
- Mehtods:
+    ~ INITIAL_NO_CARDS
+    ~ ASPECT_RATIO_OF_CARD
+    ~ CARD_SIZE_TO_VIEW_SIZE_RATIO
+    ~ tMDB
+    ~ firebase
+    ~ childrenViewControllersInView
+ 
+    Lazyily loaded variables:
+      ~ loginSwipeableCardViewController: LoginSwipeableCardViewController
+ 
+ Methods:
+    UIViewController Methods:
+      ~ viewDidLoad() -> Void
+    
+    Setup:
+      ~ initialSetup() -> Void
+ 
+    View Controllers as children:
+      ~ createFilmCardViewController(movie: Movie) -> FilmCardViewController
+      ~ addViewControllerAsChildViewController(viewController: FilmCardViewController) -> Void
+      ~ addViewControllerAsChildViewController(viewController: LoginSwipeableCardViewController) -> Void
+      ~ removeViewControllerAsChildViewController(viewController: UIViewController) -> Void
+    
+    Master Swipe VC Delegate Methods:
+      ~ cardSwiped() -> Void
+      ~ cardSwipedRight(card: SwipeableCardView) -> Void
+      ~ cardSwipedLeft(card: SwipeableCardView) -> Void
+ 
  Developer Notes:
+    Class still undergoing heavy development
  
  */
 
@@ -15,84 +54,104 @@ import UIKit
 import Darwin
 
 
-class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerDelegate, MasterSwipeViewControllerDelegate {
-  /*  Master SwipeViewController is the main view controller of the cinefile
-        ~ it controlls the loading and removing of Child ViewControllers in the form of swipeable cards
-        ~ as such it determines weather or not to display tips, user log in, films or advertisments and in which order
-  */
+class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewControllerDelegate {
+
+  // MARK: - Variables & Constant declarations
   
+  let INITIAL_NO_CARDS = 3,
+      ASPECT_RATIO_OF_CARD: CGFloat = 1.49,
+      CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.6
   
-  // list of cards in view
+  let tMDB = TMDBService(),
+      firebase = FirebaseService()
+  
   var childrenViewControllersInView = [FilmCardViewController]()
   
-  let INITIAL_NO_CARDS = 3
-  let ASPECT_RATIO_OF_CARD: CGFloat = 1.49
-  let CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.8
+  // MARK: - Lazy loading custom View Controllers=
   
-  var tMDB = TMDBService()
-  let firebase = FirebaseService()
+//  lazy var loginSwipeableCardViewController: LoginSwipeableCardViewController = {
+//    /* Instantiate View Controller then save it when variable is called upon */
+//    
+//    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+//    let viewController = storyboard.instantiateViewControllerWithIdentifier("LoginSwipeableCardViewController") as! LoginSwipeableCardViewController
+//    self.addViewControllerAsChildViewController(viewController)
+//    
+//    return viewController
+//  }()
+  
+  
+  // MARK: - UIViewController Methods
   
   override func viewDidLoad() {
-      super.viewDidLoad()
-      setupView()
-      checkIfLoggedIn()
-      tMDB.viewController = self
-      tMDB.addMoviesToBufferedArray() {
-        _ in
-        print("\(self.tMDB.bufferedMovies.count)")
-        self.initialSetup()  // begin loading films into the view
+    super.viewDidLoad()
+    
+    // show login view controller
+    presentLoginViewController()
+    
+    
+    // Start downloading movies
+    self.tMDB.addMoviesToBufferedArray() {
+      _ in
+      self.initialSetup()
+    }
+  }
+  
+  
+  // MARK: - Setup
+  
+  func initialSetup() {
+    /* Helper function, initialize card stack after finished getting assets */
+    
+    for _ in 0..<self.INITIAL_NO_CARDS {
+      
+      // Get movie from tmdb service
+      if let movie = tMDB.getNextMovie() {
         
+        // Add viewController as child
+        let movieVC = self.createFilmCardViewController(movie)
+        self.childrenViewControllersInView.append(movieVC)
+//        self.childrenViewControllersInView.insert(movieVC, atIndex: 0)
+        self.addViewControllerAsChildViewController(movieVC)
+      }
+      
     }
   }
   
-  override func viewDidAppear(animated: Bool) {
-    super.viewDidAppear(true)
-    
-  }
-
-  override func didReceiveMemoryWarning() {
-      super.didReceiveMemoryWarning()
-      // Dispose of any resources that can be recreated.
-  }
-    
-
-  func setupView() {
-    // Helper function - configure and set information in view
-    updateViews()
-  }
-  
-  func updateViews() {
-    // Show and hide the child views
-        filmCardViewController.view.hidden = true
-   }
-  
-  // MARK: - User Login
-  func checkIfLoggedIn() {
-    // Heleper Function to clean up viewDidLoad
-    if (FBSDKAccessToken.currentAccessToken() != nil) {
-      // user is already logged in
-      loginSwipeableCardViewController.view.hidden = true
-      firebase.logUserIntoFirebase()
-    } else {
-      // user is not logged in
-      loginSwipeableCardViewController.view.hidden = false
-    }
-  }
-  
-  func loadFilmCards() {
-    print("Delegate method call worked")
-  }
   
   // MARK: - ViewControllers as Children
+  
+  
+  
+  private func presentLoginViewController() {
+    /* Add login card to the view */
+    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+    let viewController = storyboard.instantiateViewControllerWithIdentifier("LoginSwipeableCardViewController") as! LoginSwipeableCardViewController
+    self.addViewControllerAsChildViewController(viewController)
+  }
+  
+  private func createFilmCardViewController(movie: Movie) -> FilmCardViewController {
+    // Load storyboardfind
+    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+    
+    // Instantiate ViewController
+    let viewController = storyboard.instantiateViewControllerWithIdentifier("FilmCardViewController") as! FilmCardViewController
+    
+    viewController.movie = movie
+    
+    return viewController
+  }
   
   private func addViewControllerAsChildViewController(viewController: FilmCardViewController) {
     /*
     */
+    print("adding view controller as child")
+    
     // Add child ViewController
     addChildViewController(viewController)
     
     // Add child View as subview
-    view.addSubview(viewController.view)
+//    view.addSubview(viewController.view)
+    view.insertSubview(viewController.view, atIndex: 0)
     
     // Configure child View
     let cardHeight = self.view.frame.height * CARD_SIZE_TO_VIEW_SIZE_RATIO,
@@ -110,10 +169,14 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
       
     // Notify child ViewController
     viewController.didMoveToParentViewController(self)
-      
+  
     // pass the orgin point to the controller
     viewController.cardOrgin = cardFrame.origin
     viewController.addOverlayView()
+    
+    // Get notifications from gesture recoginizers
+    let swipeableView = viewController.view as! SwipeableCardView
+    swipeableView.delegate = self
   }
   
   private func addViewControllerAsChildViewController(viewController: LoginSwipeableCardViewController) {
@@ -139,10 +202,10 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
     viewController.cardOrigin = cardFrame.origin
     viewController.addOverlayView()
     viewController.addFBLoginButton()
-    viewController.delegate = self
+    
+    let swipeableCardView = viewController.view as! LoginSwipeableView
+    swipeableCardView.masterViewController = self
   }
-  
-  
   
   private func removeViewControllerAsChildViewController(viewController: UIViewController) {
     // Notify child ViewController
@@ -156,89 +219,69 @@ class MasterSwipeViewController: UIViewController, LoginSwipeableViewControllerD
   }
   
   
-  // MARK: - Card Stack
-
 
   
-  func initialSetup() {
-    /* Helper function, initialize card stack after finished getting assets */
-    for _ in 0..<self.INITIAL_NO_CARDS {
-      
-      // Get movie from tmdb service
-      let movie = tMDB.getNextMovie()
-      if let movie = movie {
-        
-        // Add viewController as child
-        let movieVC = self.createFilmCardViewController(movie)
-        self.childrenViewControllersInView.append(movieVC)
-        self.addViewControllerAsChildViewController(movieVC)
-      }
+  
+  // MARK: - Master Swipe VC Delegate Methods
+  
+  func loginViewDismissed() {
+    //....
+    print("we dismissed the login view")
+  }
+  
+  override func cardSwiped() {
+    // add an additional card to the stack
+    if let movie = self.tMDB.getNextMovie() {
+      // Add viewController as child
+      print("got next movie")
+      let movieVC = self.createFilmCardViewController(movie)
+            self.childrenViewControllersInView.append(movieVC)
+      self.addViewControllerAsChildViewController(movieVC)
     }
-  }
-
-  private func createFilmCardViewController(movie: Movie) -> FilmCardViewController {
-    // Load storyboardfind
-    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
     
-    // Instantiate ViewController
-    let viewController = storyboard.instantiateViewControllerWithIdentifier("FilmCardViewController") as! FilmCardViewController
-    viewController.movie = movie
     
-    return viewController
+    
+    print("we swiped a card away")
+    // Remove the first card after delay
+    
+    
+    
+    let vc = self.childrenViewControllersInView.removeAtIndex(0)
+    self.removeViewControllerAsChildViewController(vc)
+    
+    
   }
   
-  lazy var filmCardViewController: FilmCardViewController = {
-      // Load storyboard
-      let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+  override func cardSwipedRight() {
     
-      // Instantiate ViewController
-      let viewController = storyboard.instantiateViewControllerWithIdentifier("FilmCardViewController") as! FilmCardViewController
+    let vc = self.childrenViewControllersInView.first
     
-      // Add ViewController as a child
-      self.addViewControllerAsChildViewController(viewController)
+    if let id = vc?.id {
+      firebase.saveFilm(id: id, list: Constants.Review.Save)
+    }
     
-      return viewController
-  }()
+    
+    self.cardSwiped()
+
+    
+    print("swiped right")
+    
+  }
   
-  lazy var loginSwipeableCardViewController: LoginSwipeableCardViewController = {
-
-    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-    let viewController = storyboard.instantiateViewControllerWithIdentifier("LoginSwipeableCardViewController") as! LoginSwipeableCardViewController
-    self.addViewControllerAsChildViewController(viewController)
+  override func cardSwipedLeft() {
+    let vc = self.childrenViewControllersInView.first
     
-    return viewController
-  }()
-
+    if let id = vc?.id {
+      firebase.saveFilm(id: id, list: Constants.Review.Remove)
+    }
+    
+    
+    self.cardSwiped()
+    
+    
+    print("swiped left")
+    
+  }
 }
 
-
-
-//  func setupCardStack() {
-//    // Helper method to keep viewDidLoad uncluttered
-//    let INITIAL_NO_CARDS = 5
-//    let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
-//    var viewControllersAdded = 0
-//    self.fillBufferedViewControllersInBackground(INITIAL_NO_CARDS)
-//
-//    dispatch_async(dispatch_get_global_queue(priority, 0)) {
-//      print("got of the main queue broooo")
-//
-//
-//      while (viewControllersAdded < INITIAL_NO_CARDS) {
-//          sleep(2)
-//          print("we out here dispatching")
-//          for i in 0..<self.bufferedViewControllers.count {
-//            if viewControllersAdded < INITIAL_NO_CARDS {
-//              self.addViewControllerAsChildViewController(self.bufferedViewControllers[i])
-//              self.childrenViewControllersInView.append(self.bufferedViewControllers[i])
-//              viewControllersAdded += 1
-//            } else {
-//              break
-//            }
-//          }
-//        }
-//
-//      self.bufferedViewControllers.removeFirst(viewControllersAdded)
-//    }
-//  }
 

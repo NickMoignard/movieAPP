@@ -23,9 +23,9 @@ class SwipeableCardView: UIView {
   
   var view: UIView!
   var nibName = "SwipeableCardView"
-  var movieStruct: Movie?
-  var delegate: SwipeableCardViewDelegate?
   
+  var delegate: MasterSwipeViewControllerDelegate?
+
   var overlayView: SwipeableCardOverlayView? = nil
   
   
@@ -40,14 +40,7 @@ class SwipeableCardView: UIView {
     super.init(coder: aDecoder)
     setup()
   }
-
   
-  convenience init (frame: CGRect, data: Movie?) {
-    self.init(frame: frame)
-    setup()
-    movieStruct = data!
-    setupInformationInView(movieStruct!)
-  }
   
   // MARK: - Setup
   
@@ -59,12 +52,6 @@ class SwipeableCardView: UIView {
     addShadowToCard()
     addOverlayView()
   }
-  
-  func setupInformationInView (data: Movie) {
-    // Load information into Outlets call this method from inside the view controller within the animations completionHandler
-  }
-  
-  
   
   
   // NOTE: - Pretty Sure this function is unecessary as im not using the interface builder atm
@@ -145,7 +132,7 @@ class SwipeableCardView: UIView {
   
   func animateCardOutTo(finishPoint: CGPoint) {
     UIView.animateWithDuration(
-                                0.4,
+                                Constants().getAnimateOutDuration(),
                                 animations: {
                                   self.center = finishPoint
                                 },
@@ -192,14 +179,16 @@ class SwipeableCardView: UIView {
 
         let rightEdge = CGPointMake(500, 2*yFromCenter + self.originalPoint.y)
         animateCardOutTo(rightEdge)
-        delegate?.cardSwipedRight(self)
+        cardSwipedRight()
+        
         
       } else if (xFromCenter < -ACTION_MARGIN) {
         // Left action
         
         let leftEdge = CGPointMake(-500, 2*yFromCenter + self.originalPoint.y)
         animateCardOutTo(leftEdge)
-        delegate?.cardSwipedLeft(self)
+        cardSwipedLeft()
+        
       } else {
         // Animate card back
         
@@ -224,11 +213,20 @@ class SwipeableCardView: UIView {
     self.addGestureRecognizer(recognizer)
   }
   
-  func cardDoubleTapped() {
-    delegate?.showDetail(self)
-  }
-  // MARK: - Actions
   
+  // Overideable functions
+  
+  func cardDoubleTapped() {
+    delegate?.showDetail()
+  }
+  
+  func cardSwipedRight() {
+    delegate?.cardSwipedRight()
+  }
+  
+  func cardSwipedLeft() {
+    delegate?.cardSwipedLeft()
+  }
   
 }
 

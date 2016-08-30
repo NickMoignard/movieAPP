@@ -19,7 +19,7 @@ import Firebase
 class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDelegate {
   
   var cardOrigin: CGPoint? = nil
-  var delegate: LoginSwipeableViewControllerDelegate? = nil
+//  var delegate: LoginSwipeableViewControllerDelegate? = nil
   
   let firebase = FirebaseService()
   
@@ -72,22 +72,23 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
   
   func loginButton(loginButton: FBSDKLoginButton!, didCompleteWithResult result: FBSDKLoginManagerLoginResult!, error: NSError!) {
     // DELEGATE METHOD
-    print("User Logged In")
     
-    if ((error) != nil)
-    {
-      // Process error
-      print("there was an error!")
+    if error != nil {
+      print("there was an error logging in with facebook!")
+      
     }
     else if result.isCancelled {
-      // Handle cancellations
-      print("user cancelled")
-    }
-    else {
-      // If you ask for multiple permissions at once, you
-      // should check if specific permissions missing
-      firebase.logUserIntoFirebase()
-      self.delegate!.checkIfLoggedIn()
+      print("user cancelled logging in with facebook")
+      
+    } else {
+      // Swap facebook credentials with firebase credentials, then login to firebase
+      let credential = FIRFacebookAuthProvider.credentialWithAccessToken(FBSDKAccessToken.currentAccessToken().tokenString)
+      FIRAuth.auth()?.signInWithCredential(credential) {
+        (user, error) in
+        if error != nil {
+          print("There was an error logging in to firebase after getting facebook credentials")
+        }
+      }
     }
   }
   

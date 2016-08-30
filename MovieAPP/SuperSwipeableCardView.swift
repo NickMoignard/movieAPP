@@ -27,7 +27,7 @@ class SuperSwipeableCardView: UIView {
   var view: UIView!
   var originalPoint = CGPoint(), xFromCenter = CGFloat(), yFromCenter = CGFloat()
   var overlayView: SwipeableCardOverlayView? = nil
-  var delegate: SwipeableCardViewDelegate?
+  var delegate: MasterSwipeViewControllerDelegate?
 
   // MARK: - Initializers
   

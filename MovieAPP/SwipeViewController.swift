@@ -14,7 +14,7 @@
 import Foundation
 import UIKit
 
-class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
+class SwipeViewController: UIViewController, MasterSwipeViewControllerDelegate {
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -26,27 +26,30 @@ class SwipeViewController: UIViewController, SwipeableCardViewDelegate {
   
   // MARK: - SwipeableCardViewDelgate Implementation
   
-  func cardSwipedLeft(card: SwipeableCardView) {
+  func cardSwipedLeft() {
     // ...
+    print("i was called")
     cardSwiped()
   }
-  func cardSwipedRight(card: SwipeableCardView) {
+  func cardSwipedRight() {
     // ...
     cardSwiped()
   }
   
-  func showDetail(card: SwipeableCardView) {
-    // ...
+  func showDetail() {
+    // ...1
   }
   
   func cardSwiped () -> Void {
     //  Remove Card from loaded cards index and then if there are more cards to load, load the next card.
-    
+  }
+  
+  func loadFilmCards() -> Void {
+    // ...
   }
   
   func determineAction(viewController: AnyObject) {
     // ...
-    let viewControllerMirror = Mirror(reflecting: viewController)
   }
   
   /*  send self to delegate

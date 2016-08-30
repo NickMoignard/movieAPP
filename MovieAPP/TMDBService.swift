@@ -118,10 +118,10 @@ class TMDBService: FilmDataBaseDelegate {
  
   // MARK: - Variable, Constant Declarations
   
-  let MIN_BUFFER: Int = 10,
+  var MIN_BUFFER: Int = 10,
       BUFFER_EMPTY: Int = 1,
-      BASEURL = NSURL(string: "https://api.themoviedb.org")!,
-      BASEIMAGEURL = NSURL(string: "https://image.tmdb.org/t/p/")!
+      BASEURL: NSURL,
+      BASEIMAGEURL: NSURL
   
   let network = NetworkOperation(),
       firebase = FirebaseService()
@@ -129,14 +129,15 @@ class TMDBService: FilmDataBaseDelegate {
   var downloadingPageFromTMDB: Bool = false,
       numberOfDownloadingMovies: Int = 0,
       bufferedMovies: [Movie] = [],
-      searchParameters: [String: AnyObject]? = nil,
-      viewController: MasterSwipeViewControllerDelegate? = nil
+      usersMostRecentSearchParameters: [String: AnyObject]? = nil
+//      viewController: MasterSwipeViewControllerDelegate? = nil
   
   
   // MARK: - Initializers
   
   init() {
-    // ...
+    self.BASEURL =  NSURL(string: "https://api.themoviedb.org")!
+    self.BASEIMAGEURL = NSURL(string: "https://image.tmdb.org/t/p/")!
   }
 
   
@@ -177,46 +178,49 @@ class TMDBService: FilmDataBaseDelegate {
     dispatch_async(dispatch_get_global_queue(priority, 0)) {
       
       // Get search parameters
-      let params = self.getUsersMostRecentSearchParameters()
-      self.updateSearchParametersWithCorrectPageNo(params) {
-        correctSearchParameters in
+      self.getUsersLastSearch() {
+        params in
+      
+        self.updateSearchParametersWithCorrectPageNo(params) {
+          correctSearchParameters in
         
-        // Download page of films
-        self.getPageOfTMDBDiscoverData(correctSearchParameters){
-          json in
-          if let array = json["results"].array {
-            var numResults = array.count
-            // Check each film against previously seen films
-            array.forEach({
-              (movieJSON) in
-              if let filmID = movieJSON["id"].int {
-                self.firebase.checkIdAgainstUsersHistory(filmID) {
-                  (unseen) in
-                  if unseen {
+          // Download page of films
+          self.getPageOfTMDBDiscoverData(correctSearchParameters){
+            json in
+            if let array = json["results"].array {
+              var numResults = array.count
+              // Check each film against previously seen films
+              array.forEach({
+                (movieJSON) in
+                if let filmID = movieJSON["id"].int {
+                  self.firebase.checkIdAgainstUsersHistory(filmID) {
+                    (unseen) in
+                    if unseen {
                     
-                    // Download film assets
-                    self.numberOfDownloadingMovies += 1
-                    let _ = Movie(json: movieJSON, dataBaseDelegate: self) {
-                      movie in
+                      // Download film assets
+                      self.numberOfDownloadingMovies += 1
+                      let _ = Movie(json: movieJSON, dataBaseDelegate: self) {
+                        movie in
                       
-                      // get back on main queue and add films to buffer
-                      dispatch_async(dispatch_get_main_queue()) {
-                        self.numberOfDownloadingMovies -= 1
-                        numResults -= 1
-                        self.bufferedMovies.append(movie)
+                        // get back on main queue and add films to buffer
+                        dispatch_async(dispatch_get_main_queue()) {
+                          self.numberOfDownloadingMovies -= 1
+                          numResults -= 1
+                          self.bufferedMovies.append(movie)
                         
-                        // let viewController know if all films are finished downloading
-                        if (self.numberOfDownloadingMovies < 1) && (numResults == 0)  {
-                          completionHandler(finished: true)
+                          // let viewController know if all films are finished downloading
+                          if (self.numberOfDownloadingMovies < 1) && (numResults == 0)  {
+                            completionHandler(finished: true)
+                          }
                         }
                       }
+                    } else {  // already seen the film
+                      numResults -= 1
                     }
-                  } else {  // already seen the film
-                    numResults -= 1
                   }
                 }
-              }
-            })
+              })
+            }
           }
         }
       }
@@ -297,14 +301,8 @@ class TMDBService: FilmDataBaseDelegate {
   
   // MARK: - Firebase Interaction
   
-  func getUsersMostRecentSearchParameters() -> [String: AnyObject] {
-    /* Getter method for recent search parameters data member */
-    if self.searchParameters == nil {
-      print("search parameters got recked")
-      return [String: AnyObject]()
-    }
-    return self.searchParameters!
-  }
+
+  
   
   func createSearchParametersDictForFirebase(sorting: Constants.Sorting, minVoteAvg: Float?, genre: Constants.Genre?, year: Int?) -> [String: AnyObject] {
     /* Build correct search parameters for a tmdb discover .GET request */
@@ -331,17 +329,14 @@ class TMDBService: FilmDataBaseDelegate {
     /* Before adding any additional search objects to a users firebase, check that they do not exist yet and update accordingly */
     
     // Create the path to users previous searches inside firebase
-    if let user = FIRAuth.auth()?.currentUser {
-      
-      let userID = user.uid
-      let path = "searches/\(userID)"
+    if (FIRAuth.auth()?.currentUser) != nil {
       
       // Page no is the varibale from firebase we are interested in retrieving
       var params = searchParameters
       params.removeValueForKey("page")
       
       // Get search history from firebase
-      firebase.getSearchFromFirebaseWithExactKeyValuePairs(path, dictionary: params) {
+      firebase.getSearchFromFirebaseWithExactKeyValuePairs(params) {
         (optTuple) in
         if let searchTuple = optTuple {  // The search returned a result
           
@@ -349,15 +344,13 @@ class TMDBService: FilmDataBaseDelegate {
           let (search_uid, search) = searchTuple
           var searchDict = search
           
-          print(searchDict)
-          
           // Increment results page number
           if let pageNo = searchDict["page"]{
             let page = pageNo as! Int + 1
             searchDict.updateValue(page, forKey: "page")
           }
           
-          self.firebase._saveSearch(search_uid, searchParameters: searchDict)
+          self.firebase.saveSearch(search_uid, searchParameters: searchDict)
           
           completionHandler(searchDict)
           
@@ -366,7 +359,7 @@ class TMDBService: FilmDataBaseDelegate {
           var searchDict = searchParameters
           searchDict.updateValue(1, forKey: "page")
           
-          self.firebase._saveSearch(nil, searchParameters: searchDict)
+          self.firebase.saveSearch(nil, searchParameters: searchDict)
           completionHandler(searchDict)
         }
       }
@@ -376,5 +369,39 @@ class TMDBService: FilmDataBaseDelegate {
   
   // MARK: - Unfinished Work
   
+  func initMostRecentSearchDataMember(completionHandler: ([String: AnyObject]?) -> Void ) -> Void {
+    /* Getter method for recent search parameters data member */
+    
+    if self.usersMostRecentSearchParameters == nil {
+      
+      print("No search parameters where present, getting most recent from firebase")
+      
+      // download most recent search parameters from firebase
+      firebase.getMostRecentSearch() {
+        (searchParams) in
+        if searchParams == nil {
+          // create search
+        }
+        // This block of code is executed whenever the users searches update in firebase
+        print("Got users most recent search parameters from firebase")
+        self.usersMostRecentSearchParameters = searchParams
+        completionHandler(searchParams)
+      }
+    }
+  }
   
+  func getUsersLastSearch(completionHandler: ([String: AnyObject]) -> Void ) {
+    if let search = self.usersMostRecentSearchParameters {
+      completionHandler(search)
+    } else {
+      self.initMostRecentSearchDataMember(){
+        search in
+        if search != nil {
+          completionHandler(search!)
+        } else {
+          print("ERRORERROOROROROEOREREERO!")
+        }
+      }
+    }
+  }
 }

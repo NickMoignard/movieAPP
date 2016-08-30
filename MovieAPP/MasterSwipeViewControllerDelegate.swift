@@ -14,4 +14,9 @@ import Foundation
 
 protocol MasterSwipeViewControllerDelegate {
   func loadFilmCards() -> Void
+  func cardSwipedRight() -> Void
+  func cardSwipedLeft() -> Void
+  func showDetail() -> Void
+  
+//  func cardFinishedAnimatingOut() -> Void
 }

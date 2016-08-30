@@ -15,12 +15,12 @@ import SwiftyJSON
 import UIKit
 
 struct Movie {
-  var title: String?, releaseDate: String?, director: String?, poster: UIImage? = nil, jsonData: JSON
+  var title: String?, releaseDate: String?, director: String?, poster: UIImage? = nil, jsonData: JSON, id: Int?
   var hasPoster: Bool? = nil
   var delegate: FilmDataBaseDelegate
   
   init(json: JSON, dataBaseDelegate: FilmDataBaseDelegate, completionHandler: (Movie) -> Void ) {
-
+    id = json["id"].int
     title = json["title"].string
     releaseDate = json["release_date"].string
     jsonData = json
@@ -32,6 +32,7 @@ struct Movie {
           if job == "Director" {
             if let film_director = crew_list[i]["name"].string {
               self.director = film_director
+              print("actually getting the director")
             }
           }
         }

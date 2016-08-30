@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Override point for customization after application launch.
     Fabric.with([Crashlytics.self])
     FIRApp.configure()
+    
     return FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)  // Facebook SDK Integration
   }
 
