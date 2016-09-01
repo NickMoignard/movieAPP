@@ -10,12 +10,12 @@
  Mehtods:
  Developer Notes:
  
- not sure if i need this protocol anymore 30/8/16
- 
- */
+*/
 
 import Foundation
 
 protocol LoginMasterSwipeViewControllerDelegate {
   func loginViewDismissed() -> Void
+  func userLoggedIn() -> Void
+  func userLoggedOut() -> Void
 }

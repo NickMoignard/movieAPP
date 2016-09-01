@@ -41,22 +41,23 @@
 
 import UIKit
 
-class FilmCardViewController: SwipeViewController {
+class FilmCardViewController: SwipeViewController, FilmCardViewControllerDelegate {
   // MARK: - Outlets, Constants & Variables
   
   @IBOutlet weak var directorLabel: UILabel!
   @IBOutlet weak var posterView: UIImageView!
   
   var filmCardView: FilmCardView? = nil,
-      cardOrgin: CGPoint? = nil,
+      cardOrigin: CGPoint? = nil,
       movie: Movie? = nil,
-      id: Int?
+      id: Int?,
+      overlayView: SwipeableCardOverlayView?
+  
   
   // MARK: - View Setup
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
     loadDataFromMovie()
   }
   
@@ -74,19 +75,47 @@ class FilmCardViewController: SwipeViewController {
     }
   }
   
-  func addOverlayView() {
+  override func addOverlayView(origin: CGPoint) {
     /*  Add overlay view over current view with coordinate info from parent
         controller.
         Method to be called by parent when view is added to superview.
     */
+    
+
+    let center = self.view.center
     var cardFrame = self.view.frame
     cardFrame.origin.x = 0
     cardFrame.origin.y = 0
-   
-    if let cardOrgin = cardOrgin {
-      let overlayView = SwipeableCardOverlayView(frame: cardFrame, center: self.view.center, swipeableCardOriginPoint: cardOrgin)
-      self.view.addSubview(overlayView)
-      self.filmCardView?.overlayView = overlayView
+    
+    
+    let overlayView = SwipeableCardOverlayView(frame: cardFrame, center: center, swipeableCardOriginPoint: origin)
+    
+    // make view clear initialy
+    overlayView.alpha = 0
+    
+    self.overlayView = overlayView
+    self.view.addSubview(overlayView)
+  }
+  
+  // MARK: Overlay View Delegate Methods
+  
+  func resetOverlayAlpha() {
+    self.overlayView?.alpha = 0
+  }
+  
+  func updateOverlay(distance: CGPoint, actionMargin: CGFloat) {
+    // Update overlay for user gestures
+
+    
+    let MIN_ALPHA: CGFloat = 0.9
+    
+    if distance.x > 0 {
+      self.overlayView?.setMode(.Right)
+      self.overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
+      
+    } else if distance.x < 0 {
+      self.overlayView?.setMode(.Left)
+      self.overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
     }
   }
 }

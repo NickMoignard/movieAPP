@@ -17,6 +17,7 @@ protocol MasterSwipeViewControllerDelegate {
   func cardSwipedRight() -> Void
   func cardSwipedLeft() -> Void
   func showDetail() -> Void
+  func removeCardFromView() -> Void
   
 //  func cardFinishedAnimatingOut() -> Void
 }

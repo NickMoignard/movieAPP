@@ -23,10 +23,25 @@ class SwipeableCardView: UIView {
   
   var view: UIView!
   var nibName = "SwipeableCardView"
-  
   var delegate: MasterSwipeViewControllerDelegate?
-
-  var overlayView: SwipeableCardOverlayView? = nil
+  
+  var parentViewController: FilmCardViewController? {
+    var parentResponder: UIResponder? = self
+    while parentResponder != nil {
+      parentResponder = parentResponder!.nextResponder()
+      if let viewController = parentResponder as? FilmCardViewController {
+        return viewController
+      }
+    }
+    return nil
+  }
+  
+//  var overlayView: SwipeableCardOverlayView? = nil,
+//      oCenter: CGPoint? = nil,
+//      oOrigin: CGPoint? = nil
+//  
+  
+  
   
   
   // MARK: - Initializers
@@ -41,34 +56,39 @@ class SwipeableCardView: UIView {
     setup()
   }
   
+//  convenience init(frame: CGRect, overlayCenter: CGPoint, overlayOrigin: CGPoint) {
+//    self.init(frame: frame)
+//    oCenter = overlayCenter
+//    oOrigin = overlayOrigin
+//    setup()
+//  }
   
   // MARK: - Setup
   
   func setup () {
     // Will need to determine importance, atm there is no empty view in storyboard to fill
-//    fillEmptyStoryBoardView()
     addPanGestureRecognizer()
     addDoubleTapGestureRecognizer()
-    addShadowToCard()
-    addOverlayView()
+    embelishCardAppearance()
+    
   }
   
   
   // NOTE: - Pretty Sure this function is unecessary as im not using the interface builder atm
   
-  func fillEmptyStoryBoardView() {
-    /*  property initialized from method(???)
-        customize frame and autoresizing mask inorder to fill empty view
-        frame equals bounds from the placeholder view in storyboard
-        add view to self
-    */
-    
-    view = loadViewFromNib()
-    view.frame = self.bounds
-//    view.layer.cornerRadius = 10 
-    view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-    addSubview(view)
-  }
+//  func fillEmptyStoryBoardView() {
+//    /*  property initialized from method(???)
+//        customize frame and autoresizing mask inorder to fill empty view
+//        frame equals bounds from the placeholder view in storyboard
+//        add view to self
+//    */
+//    
+//    view = loadViewFromNib()
+//    view.frame = self.bounds
+////    view.layer.cornerRadius = 10 
+//    view.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+//    addSubview(view)
+//  }
   
   
   func loadViewFromNib () -> UIView {
@@ -79,37 +99,31 @@ class SwipeableCardView: UIView {
     return view
   }
   
-  func addShadowToCard() {
-    self.layer.shadowRadius = 8
-    self.layer.shadowOpacity = 0.1
-    self.layer.shadowOffset = CGSizeMake(2, 2)
+  func embelishCardAppearance() {
+    
+    self.layer.cornerRadius = 7
+    
+    self.layer.shadowRadius = 7
+    self.layer.shadowOpacity = 0.05
+    self.layer.shadowOffset = CGSizeMake(0, 0)
   }
   
-  func addOverlayView() {
-    let SOME_CONSTANT: CGFloat = 100
-    let frame = CGRectMake(
-      self.frame.size.width / 2 - SOME_CONSTANT,
-      self.frame.size.height / 2 - SOME_CONSTANT,
-      SOME_CONSTANT,
-      SOME_CONSTANT
-    )
-    overlayView = SwipeableCardOverlayView(frame: frame)
-    addSubview(overlayView!)
-  }
   
-  func updateOverlay(distance: CGPoint, actionMargin: CGFloat) {
-    // Update overlay for user gestures
-    
-    let MIN_ALPHA: CGFloat = 0.99
-    
-    if distance.x > 0 {
-      overlayView?.setMode(.Right)
-      overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
-    } else if distance.x < 0{
-      overlayView?.setMode(.Left)
-      overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
-    }
-  }
+  
+//  func updateOverlay(distance: CGPoint, actionMargin: CGFloat) {
+//    // Update overlay for user gestures
+//    
+//    let MIN_ALPHA: CGFloat = 0.9
+//    
+//    if distance.x > 0 {
+//      self.overlayView?.setMode(.Right)
+//      self.overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
+//      
+//    } else if distance.x < 0 {
+//      self.overlayView?.setMode(.Left)
+//      self.overlayView?.alpha = min(fabs(distance.x) / actionMargin, MIN_ALPHA)
+//    }
+//  }
   
   // MARK: - Gesture Recognition
   
@@ -138,7 +152,7 @@ class SwipeableCardView: UIView {
                                 },
                                 completion: {
                                   (value: Bool) in
-                                  self.removeFromSuperview()
+                                  self.delegate?.removeCardFromView()
                                 }
     )
   }
@@ -168,7 +182,7 @@ class SwipeableCardView: UIView {
       self.center = CGPointMake(self.originalPoint.x + xFromCenter, self.originalPoint.y + yFromCenter)
       self.transform = scaleTransfrom
       
-      self.updateOverlay(pointFromCenter, actionMargin: ACTION_MARGIN)
+      self.parentViewController?.updateOverlay(pointFromCenter, actionMargin: ACTION_MARGIN)
       
       break
       
@@ -192,10 +206,10 @@ class SwipeableCardView: UIView {
       } else {
         // Animate card back
         
-        UIView.animateWithDuration(0.3) {
+        UIView.animateWithDuration(Constants().getAnimateOutDuration()) {
           self.center = self.originalPoint
           self.transform = CGAffineTransformMakeRotation(0)
-          self.overlayView?.alpha = 0
+          self.parentViewController?.resetOverlayAlpha()
         }
       }
       
@@ -231,6 +245,25 @@ class SwipeableCardView: UIView {
 }
 
 
-
+extension SwipeableCardView {
+  /*  stack overflow
+      http://stackoverflow.com/questions/1372977/given-a-view-how-do-i-get-its-viewcontroller
+      The UIResponder class does not store or set the next responder automatically, instead returning nil by default. Subclasses must override this method to set the next responder. UIView implements this method by returning the UIViewController object that manages it (if it has one) or its superview (if it doesn’t); UIViewController implements the method by returning its view’s superview; UIWindow returns the application object, and UIApplication returns nil.
+      So, if you recurse a view’s nextResponder until it is of type UIViewController, then you have any view’s parent viewController.
+   
+      Note that it still may not have a parent view controller. But only if the view has not part of a viewController’s view’s view hierarchy.
+  */
+  
+//  var parentViewController: FilmCardViewController? {
+//    var parentResponder: UIResponder? = self
+//    while parentResponder != nil {
+//      parentResponder = parentResponder!.nextResponder()
+//      if let viewController = parentResponder as? FilmCardViewController {
+//        return viewController
+//      }
+//    }
+//    return nil
+//  }
+}
 
 

@@ -40,14 +40,16 @@ class SwipeableCardOverlayView: UIView {
     setView()
     addImageView(center, swipeableCardOriginPoint: swipeableCardOriginPoint)
   }
+  
   // MARK: - Setup
   
   func setView() {
-    self.backgroundColor = UIColor.clearColor()
+    self.layer.cornerRadius = 7
+    self.backgroundColor = UIColor.whiteColor()
   }
   
   func addImageView(center: CGPoint, swipeableCardOriginPoint: CGPoint) {
-    //set image view frame
+    // set image view frame
     // need to get coordinates from superview, so ill need to set the super view
     print(swipeableCardOriginPoint)
     imageView.frame = CGRect(
@@ -58,7 +60,7 @@ class SwipeableCardOverlayView: UIView {
                           height: 100
     )
     imageView.contentMode = .ScaleAspectFit
-    self.addSubview(imageView)
+    self.insertSubview(imageView, aboveSubview: self)
   }
   
   

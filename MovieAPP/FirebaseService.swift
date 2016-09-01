@@ -20,7 +20,7 @@ import Firebase
 
 class FirebaseService {
   
-  
+  var userLoggedInWhenAppOpened: Bool = false
   
   func checkIdAgainstUsersHistory(filmID: Int, completionHandler: (Bool) -> Void) {
     /* Check users firebase to determine if they have seen a card return result of search */
@@ -104,6 +104,8 @@ class FirebaseService {
   
   
   func getMostRecentSearch(completionHandler: ([String: AnyObject]?) -> Void) {
+    /*  Get the most recently used search parameters from firebase
+    */
     
     if let user = FIRAuth.auth()?.currentUser {
       let path = "searches/\(user.uid)",
@@ -113,23 +115,24 @@ class FirebaseService {
       query.observeSingleEventOfType(FIRDataEventType.Value, withBlock: {
         (snapshot) in
         if let snap = snapshot.value {
-          if snap is NSNull {  // No objects at the location determined by path
-            print("User has no search history")
-            let firstSearch = self.createUsersFirstSearch()
+          
+          // No searches in firebase -> Create a search
+          if snap is NSNull {
+            print("no searches in firebase")
+            completionHandler(nil)
             
-            completionHandler(firstSearch)
+          // Found most recent search
           } else {
-          
-          
             let snapDict = snap as! [String: AnyObject],
                 (_, search) = snapDict.first!,
                 searchParams = search as! [String: AnyObject]
-          
             completionHandler(searchParams)
           }
         }
-        
       })
+    } else {
+      // user not logged in
+      completionHandler(nil)
     }
  }
   
@@ -263,7 +266,11 @@ class FirebaseService {
               
                 /* 7 parameters in firebase only 5 are comparable. (timestamp and page arn't comparable) */
               
+                
                 if let noParams = dictionary["no_params"] as? Int {
+                  
+                  print("number of parameters in search: \(noParams)")
+                  print("number of correct: \(correctParams)")
                   if noParams - 2 == correctParams {
                     // This is the correct dictionary object
                     boolReturn = true

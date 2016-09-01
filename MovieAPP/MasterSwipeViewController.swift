@@ -52,32 +52,22 @@
 
 import UIKit
 import Darwin
+import Firebase
 
 
 class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewControllerDelegate {
 
+  
   // MARK: - Variables & Constant declarations
   
   let INITIAL_NO_CARDS = 3,
-      ASPECT_RATIO_OF_CARD: CGFloat = 1.49,
-      CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.6
+      ASPECT_RATIO_OF_CARD: CGFloat = 1.59,
+      CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.7
   
   let tMDB = TMDBService(),
       firebase = FirebaseService()
   
   var childrenViewControllersInView = [FilmCardViewController]()
-  
-  // MARK: - Lazy loading custom View Controllers=
-  
-//  lazy var loginSwipeableCardViewController: LoginSwipeableCardViewController = {
-//    /* Instantiate View Controller then save it when variable is called upon */
-//    
-//    let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-//    let viewController = storyboard.instantiateViewControllerWithIdentifier("LoginSwipeableCardViewController") as! LoginSwipeableCardViewController
-//    self.addViewControllerAsChildViewController(viewController)
-//    
-//    return viewController
-//  }()
   
   
   // MARK: - UIViewController Methods
@@ -85,12 +75,12 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    
     // show login view controller
     presentLoginViewController()
     
-    
     // Start downloading movies
-    self.tMDB.addMoviesToBufferedArray() {
+    self.tMDB.tryAndAddMoviesToBufferedArray() {
       _ in
       self.initialSetup()
     }
@@ -110,7 +100,6 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
         // Add viewController as child
         let movieVC = self.createFilmCardViewController(movie)
         self.childrenViewControllersInView.append(movieVC)
-//        self.childrenViewControllersInView.insert(movieVC, atIndex: 0)
         self.addViewControllerAsChildViewController(movieVC)
       }
       
@@ -119,7 +108,6 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
   
   
   // MARK: - ViewControllers as Children
-  
   
   
   private func presentLoginViewController() {
@@ -144,13 +132,11 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
   private func addViewControllerAsChildViewController(viewController: FilmCardViewController) {
     /*
     */
-    print("adding view controller as child")
     
     // Add child ViewController
     addChildViewController(viewController)
     
     // Add child View as subview
-//    view.addSubview(viewController.view)
     view.insertSubview(viewController.view, atIndex: 0)
     
     // Configure child View
@@ -171,12 +157,17 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
     viewController.didMoveToParentViewController(self)
   
     // pass the orgin point to the controller
-    viewController.cardOrgin = cardFrame.origin
-    viewController.addOverlayView()
+    viewController.addOverlayView(cardFrame.origin)
     
+    print("added the origin")
+  
     // Get notifications from gesture recoginizers
     let swipeableView = viewController.view as! SwipeableCardView
     swipeableView.delegate = self
+    
+    
+    
+
   }
   
   private func addViewControllerAsChildViewController(viewController: LoginSwipeableCardViewController) {
@@ -200,8 +191,10 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
     
     // Set information in viewController
     viewController.cardOrigin = cardFrame.origin
-    viewController.addOverlayView()
+//    viewController.addOverlayView()
     viewController.addFBLoginButton()
+    
+    viewController.delegate = self
     
     let swipeableCardView = viewController.view as! LoginSwipeableView
     swipeableCardView.masterViewController = self
@@ -219,37 +212,51 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
   }
   
   
-
+  // MARK: - Login Master Swipe View Controller Delegate Methods
+  
+  func loginViewDismissed() {
+    // we may want to present user with notifications
+  }
+  
+  func userLoggedOut() {
+    self.userLoggedIn()
+  }
+  
+  func userLoggedIn() {
+    // delete films currently in the vc buffer
+    while (self.childrenViewControllersInView.count != 0) {
+      let vc = self.childrenViewControllersInView.popLast()
+      self.removeViewControllerAsChildViewController(vc!)
+    }
+      
+    // reset buffer
+    self.tMDB.resetBuffer()
+      
+    // try and download new films
+    self.tMDB.tryAndAddMoviesToBufferedArray() {
+      _ in
+      self.initialSetup()
+    }
+  }
   
   
   // MARK: - Master Swipe VC Delegate Methods
   
-  func loginViewDismissed() {
-    //....
-    print("we dismissed the login view")
+  override func removeCardFromView() {
+    // Remove the first card after delay
+    
+    let vc = self.childrenViewControllersInView.removeAtIndex(0)
+    self.removeViewControllerAsChildViewController(vc)
   }
   
   override func cardSwiped() {
     // add an additional card to the stack
     if let movie = self.tMDB.getNextMovie() {
       // Add viewController as child
-      print("got next movie")
       let movieVC = self.createFilmCardViewController(movie)
-            self.childrenViewControllersInView.append(movieVC)
+      self.childrenViewControllersInView.append(movieVC)
       self.addViewControllerAsChildViewController(movieVC)
     }
-    
-    
-    
-    print("we swiped a card away")
-    // Remove the first card after delay
-    
-    
-    
-    let vc = self.childrenViewControllersInView.removeAtIndex(0)
-    self.removeViewControllerAsChildViewController(vc)
-    
-    
   }
   
   override func cardSwipedRight() {
@@ -260,12 +267,7 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
       firebase.saveFilm(id: id, list: Constants.Review.Save)
     }
     
-    
     self.cardSwiped()
-
-    
-    print("swiped right")
-    
   }
   
   override func cardSwipedLeft() {
@@ -275,12 +277,7 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
       firebase.saveFilm(id: id, list: Constants.Review.Remove)
     }
     
-    
     self.cardSwiped()
-    
-    
-    print("swiped left")
-    
   }
 }
 

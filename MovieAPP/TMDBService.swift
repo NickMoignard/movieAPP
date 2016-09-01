@@ -49,7 +49,10 @@
         Optional delegate for sending a message back to the controller to
         inform when assets have finished downloading/ ready to load cards into
         view.
-
+    
+      addingMoviesToBufferedArray:
+        Flag variable for determining when films are being downloaded and
+        preventing overlapping downloads
  
     Methods:
  
@@ -65,6 +68,11 @@
           /*  Check & maintain the items within buffered films array
           */
         
+        ~ tryAndAddMoviesToBufferedArray(completionHandler: (String) -> Void) -> Void
+          /*  Gaurding function to ensure we dont add too many films to the buffer at
+              once
+          */
+ 
         ~ addMoviesToBufferedArray(completionHandler: (String) -> Void) -> Void
           /* Start the download of a new page of tmdb discover data */
 
@@ -129,7 +137,8 @@ class TMDBService: FilmDataBaseDelegate {
   var downloadingPageFromTMDB: Bool = false,
       numberOfDownloadingMovies: Int = 0,
       bufferedMovies: [Movie] = [],
-      usersMostRecentSearchParameters: [String: AnyObject]? = nil
+      usersMostRecentSearchParameters: [String: AnyObject]? = nil,
+      addingMoviesToBufferedArray: Bool = false
 //      viewController: MasterSwipeViewControllerDelegate? = nil
   
   
@@ -143,8 +152,13 @@ class TMDBService: FilmDataBaseDelegate {
   
   // MARK: - Film Buffer Management
   
+  
+  func resetBuffer() {
+    /* reset the film buffer with new search parameters */
+    self.bufferedMovies.removeAll()
+  }
+  
   func getNextMovie() -> Movie? {
-    print("getting movie from buffer")
     /* Getter method for a single Movie from the buffered array */
     
     self.checkBufferedMovies()
@@ -153,7 +167,6 @@ class TMDBService: FilmDataBaseDelegate {
   }
   
   func checkBufferedMovies() {
-    print("checking buffered movies")
     /* Check & maintain the items within buffered films array */
     
     // Get current state of the array and downloads
@@ -164,21 +177,38 @@ class TMDBService: FilmDataBaseDelegate {
     // Start additional downloads & present user with loading screen if needed
     if (buffer <= BUFFER_EMPTY) {
       // Present the loading card and wait until buffer reaches minimum count
-      self.addMoviesToBufferedArray({ _ in })
+      self.tryAndAddMoviesToBufferedArray({ _ in })
     } else if buffer < MIN_BUFFER && !downloadingPageFromTMDB {
-      self.addMoviesToBufferedArray({_ in })
+      self.tryAndAddMoviesToBufferedArray({_ in })
     }
   }
   
-  func addMoviesToBufferedArray(completionHandler: (finished: Bool) -> Void) {
+  func tryAndAddMoviesToBufferedArray(completionHandler: (Bool) -> Void) {
+    /*  Gaurding function to ensure we dont add too many films to the buffer at
+        once
+    */
+    
+    // not downloading any films so lets add films to the buffer
+    if !(self.addingMoviesToBufferedArray) {
+      self.addMoviesToBufferedArray() {
+        finished in
+        completionHandler(finished)
+      }
+    }
+  }
+  
+  private func addMoviesToBufferedArray(completionHandler: (finished: Bool) -> Void) {
     /* Start the download of a new page of tmdb discover data */
+    
+    self.addingMoviesToBufferedArray = true
+    
     print("adding movies to buffered array")
     // Get off main queue
     let priority = DISPATCH_QUEUE_PRIORITY_DEFAULT
     dispatch_async(dispatch_get_global_queue(priority, 0)) {
       
       // Get search parameters
-      self.getUsersLastSearch() {
+      self.getSearchParameters() {
         params in
       
         self.updateSearchParametersWithCorrectPageNo(params) {
@@ -187,8 +217,11 @@ class TMDBService: FilmDataBaseDelegate {
           // Download page of films
           self.getPageOfTMDBDiscoverData(correctSearchParameters){
             json in
+            
+            
             if let array = json["results"].array {
               var numResults = array.count
+              
               // Check each film against previously seen films
               array.forEach({
                 (movieJSON) in
@@ -210,6 +243,7 @@ class TMDBService: FilmDataBaseDelegate {
                         
                           // let viewController know if all films are finished downloading
                           if (self.numberOfDownloadingMovies < 1) && (numResults == 0)  {
+                            self.addingMoviesToBufferedArray = false
                             completionHandler(finished: true)
                           }
                         }
@@ -228,6 +262,7 @@ class TMDBService: FilmDataBaseDelegate {
   }
   
   // MARK: - Movie Database API Interaction
+  
   
   func initMovieFromID(id: Int, completionHandler: (Movie?) -> Void) {
     /* Download a movies assets for a given film id */
@@ -267,7 +302,7 @@ class TMDBService: FilmDataBaseDelegate {
     }
   }
   
-  func parseSearchParametersDictForTMDB(fbSearchObject: [String: AnyObject]) -> [String: AnyObject] {
+  private func parseSearchParametersDictForTMDB(fbSearchObject: [String: AnyObject]) -> [String: AnyObject] {
     /* Prepare search parameters for url encoding in a request to tmdb api  */
     var search = fbSearchObject
   
@@ -299,10 +334,8 @@ class TMDBService: FilmDataBaseDelegate {
     }
   }
   
+  
   // MARK: - Firebase Interaction
-  
-
-  
   
   func createSearchParametersDictForFirebase(sorting: Constants.Sorting, minVoteAvg: Float?, genre: Constants.Genre?, year: Int?) -> [String: AnyObject] {
     /* Build correct search parameters for a tmdb discover .GET request */
@@ -327,6 +360,7 @@ class TMDBService: FilmDataBaseDelegate {
   
   func updateSearchParametersWithCorrectPageNo(searchParameters: [String: AnyObject], completionHandler: ([String: AnyObject] -> Void)) {
     /* Before adding any additional search objects to a users firebase, check that they do not exist yet and update accordingly */
+    print("we are updating the search parameters")
     
     // Create the path to users previous searches inside firebase
     if (FIRAuth.auth()?.currentUser) != nil {
@@ -350,58 +384,116 @@ class TMDBService: FilmDataBaseDelegate {
             searchDict.updateValue(page, forKey: "page")
           }
           
+          print("found a search in firebase and updated it acordingly")
           self.firebase.saveSearch(search_uid, searchParameters: searchDict)
-          
+          self.usersMostRecentSearchParameters = searchDict
           completionHandler(searchDict)
           
         } else {  // The search does not exist yet
+          print("did not find a search in firebase")
           
           var searchDict = searchParameters
           searchDict.updateValue(1, forKey: "page")
           
           self.firebase.saveSearch(nil, searchParameters: searchDict)
+          self.usersMostRecentSearchParameters = searchDict
           completionHandler(searchDict)
         }
       }
+    } else if self.usersMostRecentSearchParameters != nil {
+      // user hasnt logged in but has already made a search
+      var searchDict = searchParameters
+      
+      // Increment results page number
+      if let pageNo = searchDict["page"]{
+        let page = pageNo as! Int + 1
+        searchDict.updateValue(page, forKey: "page")
+      }
+      
+      self.usersMostRecentSearchParameters = searchDict
+      completionHandler(searchDict)
+      
+      
+    } else {
+      // user hasn't logged in
+      
+      var searchDict = searchParameters
+      
+      searchDict.updateValue(1, forKey: "page")
+      self.usersMostRecentSearchParameters = searchDict
+      completionHandler(searchDict)
+      
+      
+      
     }
   }
   
   
   // MARK: - Unfinished Work
   
-  func initMostRecentSearchDataMember(completionHandler: ([String: AnyObject]?) -> Void ) -> Void {
-    /* Getter method for recent search parameters data member */
+  
+  func getSearchParameters(completionHandler: ([String: AnyObject]) -> Void) {
+    /*  Determine search parameters necessary for updating feed */
     
-    if self.usersMostRecentSearchParameters == nil {
+    // recent search parameters present in local memory
+    if let recentSearchParameters = self.usersMostRecentSearchParameters {
+      print("recent search parameters present in local memory")
+      completionHandler(recentSearchParameters)
       
-      print("No search parameters where present, getting most recent from firebase")
-      
-      // download most recent search parameters from firebase
+    // No recent search parameters present in local memory
+    } else {
       firebase.getMostRecentSearch() {
-        (searchParams) in
-        if searchParams == nil {
-          // create search
+        recentSearch in
+        
+        // User is not logged in/ never made a search before
+        if recentSearch == nil {
+          print("User is not logged in/ never made a search before")
+          let search = self.firebase.createUsersFirstSearch()
+          self.usersMostRecentSearchParameters = search
+          completionHandler(search)
+          
+        // Got most recent search from firebase
+        } else {
+          print("Got most recent search from firebase")
+          let search = recentSearch!
+          self.usersMostRecentSearchParameters = search
+          completionHandler(search)
         }
-        // This block of code is executed whenever the users searches update in firebase
-        print("Got users most recent search parameters from firebase")
-        self.usersMostRecentSearchParameters = searchParams
-        completionHandler(searchParams)
       }
     }
   }
   
-  func getUsersLastSearch(completionHandler: ([String: AnyObject]) -> Void ) {
-    if let search = self.usersMostRecentSearchParameters {
-      completionHandler(search)
-    } else {
-      self.initMostRecentSearchDataMember(){
-        search in
-        if search != nil {
-          completionHandler(search!)
-        } else {
-          print("ERRORERROOROROROEOREREERO!")
-        }
-      }
-    }
-  }
+//  func initMostRecentSearchDataMember(completionHandler: ([String: AnyObject]?) -> Void ) -> Void {
+//    /* Getter method for recent search parameters data member */
+//    
+//    if self.usersMostRecentSearchParameters == nil {
+//      
+//      print("No search parameters where present, getting most recent from firebase")
+//      
+//      // download most recent search parameters from firebase
+//      firebase.getMostRecentSearch() {
+//        (searchParams) in
+//        if searchParams == nil {
+//          // create search
+//        }
+//        // This block of code is executed whenever the users searches update in firebase
+//        print("Got users most recent search parameters from firebase")
+//        self.usersMostRecentSearchParameters = searchParams
+//        completionHandler(searchParams)
+//      }
+//    }
+//  }
+//  
+//  func getSearchParameters(completionHandler: ([String: AnyObject]) -> Void ) {
+//    if let search = self.usersMostRecentSearchParameters {
+//      completionHandler(search)
+//    } else {
+//      self.initMostRecentSearchDataMember(){
+//        search in
+//        if search != nil {
+//          completionHandler(search!)
+//        }
+//      }
+//    }
+//  }
 }

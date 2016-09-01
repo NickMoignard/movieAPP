@@ -13,7 +13,7 @@ struct Constants {
   
   // MARK: - Movie Database Constants
   
-  let ANIMATE_CARD_OUT_DURATION = 0.4
+  let ANIMATE_CARD_OUT_DURATION = 0.2
   
   enum Sorting: String {
     case PopularityAsc = "popularity.asc"

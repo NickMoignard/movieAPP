@@ -18,20 +18,20 @@ import Firebase
 
 class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDelegate {
   
-  var cardOrigin: CGPoint? = nil
-//  var delegate: LoginSwipeableViewControllerDelegate? = nil
+  var cardOrigin: CGPoint? = nil,
+      delegate: LoginMasterSwipeViewControllerDelegate? = nil
   
   let firebase = FirebaseService()
   
-  
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
   }
   
   // MARK: - Overlay View
-  func addOverlayView() {
+  override func addOverlayView(origin: CGPoint) {
     // ...
+    print("adding overlay view from loginVC")
   }
 
   // MARK: - Facebook Login Button and Delegate Methods
@@ -88,6 +88,7 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
         if error != nil {
           print("There was an error logging in to firebase after getting facebook credentials")
         }
+        self.delegate?.userLoggedIn()
       }
     }
   }
@@ -96,5 +97,7 @@ class LoginSwipeableCardViewController: SwipeViewController, FBSDKLoginButtonDel
   
   func loginButtonDidLogOut(loginButton: FBSDKLoginButton!) {
     print("User Logged Out")
+    try! FIRAuth.auth()?.signOut()
+    self.delegate?.userLoggedOut()
   }
 }
