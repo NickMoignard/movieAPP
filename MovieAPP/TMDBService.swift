@@ -334,6 +334,17 @@ class TMDBService: FilmDataBaseDelegate {
     }
   }
   
+  func getMoviePoster(posterPath: String, size: String, completionHandler: (UIImage?) -> Void) -> Void {
+    /* Download movie poster from tmdb image api */
+
+    let url = NSURL(string: "\(size)/\(posterPath)", relativeToURL: self.BASEIMAGEURL)!
+    self.network.downloadImageFromURL(url) {
+      poster in
+      completionHandler(poster)
+    }
+  }
+  
+  
   
   // MARK: - Firebase Interaction
   

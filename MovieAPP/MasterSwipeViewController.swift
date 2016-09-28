@@ -61,13 +61,15 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
   // MARK: - Variables & Constant declarations
   
   let INITIAL_NO_CARDS = 3,
-      ASPECT_RATIO_OF_CARD: CGFloat = 1.59,
+      ASPECT_RATIO_OF_CARD: CGFloat = 1.65,
       CARD_SIZE_TO_VIEW_SIZE_RATIO:CGFloat = 0.7
   
   let tMDB = TMDBService(),
       firebase = FirebaseService()
   
   var childrenViewControllersInView = [FilmCardViewController]()
+  
+ 
   
   
   // MARK: - UIViewController Methods
@@ -263,8 +265,8 @@ class MasterSwipeViewController: SwipeViewController, LoginMasterSwipeViewContro
     
     let vc = self.childrenViewControllersInView.first
     
-    if let id = vc?.id {
-      firebase.saveFilm(id: id, list: Constants.Review.Save)
+    if let movie = vc?.movie {
+      firebase.saveFilm(movie, list: Constants.Review.Save)
     }
     
     self.cardSwiped()

@@ -22,12 +22,28 @@ class FirebaseService {
   
   var userLoggedInWhenAppOpened: Bool = false
   
+  func getUsersFilms(completionHandler: ([String: AnyObject]) -> Void) {
+    /* Get a list of all users films from firebase */
+    let ref = FIRDatabase.database().reference()
+    if let user = FIRAuth.auth()?.currentUser {
+      ref.child("reviews/\(user.uid)").observeEventType(FIRDataEventType.Value, withBlock: {
+        snapshot in
+        
+        let snapDict = snapshot.value as! [String: AnyObject]
+        
+       
+        completionHandler(snapDict)
+        // check if null else pass snapshot to completion handler
+      })
+    }
+  }
+  
   func checkIdAgainstUsersHistory(filmID: Int, completionHandler: (Bool) -> Void) {
     /* Check users firebase to determine if they have seen a card return result of search */
     
     let ref = FIRDatabase.database().reference()
     if let user = FIRAuth.auth()?.currentUser {
-      ref.child("viewed_cards/\(user.uid)/\(filmID)").observeSingleEventOfType(FIRDataEventType.Value, withBlock: {
+      ref.child("reviews/\(user.uid)/\(filmID)").observeSingleEventOfType(FIRDataEventType.Value, withBlock: {
         (snapshot) in
         // card seen
         if snapshot.value is NSNull {
@@ -101,6 +117,33 @@ class FirebaseService {
       // user isnt logged in
     }
   }
+  
+  func saveFilm(movie: Movie, list: Constants.Review) {
+    let ref = FIRDatabase.database().reference(),
+    key: String,
+    params: [String: AnyObject] = [
+      "film_id" : movie.id!,
+      "title" : movie.title!,
+//      "release_date" : movie.releaseDate!,
+//      "director" : movie.director!,
+      "poster_path" : movie.jsonData["poster_path"].string!,
+      "list" : list.rawValue
+    ]
+    
+    if let user =  FIRAuth.auth()?.currentUser {
+      // user is logged in
+      let userID = user.uid
+      key = ref.child("/reviews/\(userID)").childByAutoId().key
+    
+      
+      let childUpdates = ["/reviews/\(userID)/\(key)": params]
+      ref.updateChildValues(childUpdates)
+      
+    } else {
+      // user isnt logged in
+    }
+  }
+  
   
   
   func getMostRecentSearch(completionHandler: ([String: AnyObject]?) -> Void) {

@@ -49,6 +49,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 // logout
   }
   
+  func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
+    // lock orientation to portrait
+    return UIInterfaceOrientationMask.Portrait
+  }
   
   // Facebook SDK Integration
   func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {

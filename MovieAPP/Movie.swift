@@ -48,4 +48,34 @@ struct Movie {
         completionHandler(self)
     }
   }
+  
+  init(delegate: FilmDataBaseDelegate, title: String? = nil, releaseDate: String? = nil, director: String? = nil, poster: UIImage? = nil, jsonData: JSON = nil, id: Int? = nil) {
+    self.delegate = delegate
+    self.title = title
+    self.releaseDate = releaseDate
+    self.director = director
+    self.poster = poster
+    self.jsonData = jsonData
+    self.id = id
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 }

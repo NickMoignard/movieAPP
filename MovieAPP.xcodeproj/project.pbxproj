@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7C2D80071D9B4B2500842A78 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D80061D9B4B2500842A78 /* DatabaseManager.swift */; };
+		7C2D80091D9BA92F00842A78 /* FilmPosterCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D80081D9BA92F00842A78 /* FilmPosterCollectionViewCell.swift */; };
+		7C2D800B1D9BBDF000842A78 /* HamburgerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C2D800A1D9BBDF000842A78 /* HamburgerTableViewController.swift */; };
 		7C3730581D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */; };
 		7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3973DD1D484AF10003771B /* AppDelegate.swift */; };
 		7C3973E31D484AF10003771B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C3973E11D484AF10003771B /* Main.storyboard */; };
@@ -32,6 +35,7 @@
 		7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */; };
 		7CC260CE1D75C2930031D1AA /* LoginSwipeableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC260CD1D75C2930031D1AA /* LoginSwipeableView.swift */; };
 		7CC999301D77DE2D00A23117 /* FilmCardViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC9992F1D77DE2D00A23117 /* FilmCardViewControllerDelegate.swift */; };
+		7CD3A70C1D9779B40072C4CF /* UserFilmsCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD3A70B1D9779B40072C4CF /* UserFilmsCollectionViewController.swift */; };
 		7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */; };
 		7CF4CF591D49BCA600F956D9 /* SwipeableCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */; };
 		7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */; };
@@ -61,6 +65,9 @@
 		18B643D6929F153B232A944C /* Pods_MovieAPP.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieAPP.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B7790A77A3561808509236B /* Pods-MovieAPP.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieAPP.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MovieAPP/Pods-MovieAPP.debug.xcconfig"; sourceTree = "<group>"; };
 		4C47926B41FCDF6943CF1E97 /* Pods-MovieAPP.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieAPP.release.xcconfig"; path = "Pods/Target Support Files/Pods-MovieAPP/Pods-MovieAPP.release.xcconfig"; sourceTree = "<group>"; };
+		7C2D80061D9B4B2500842A78 /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		7C2D80081D9BA92F00842A78 /* FilmPosterCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmPosterCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C2D800A1D9BBDF000842A78 /* HamburgerTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HamburgerTableViewController.swift; sourceTree = "<group>"; };
 		7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterSwipeViewControllerDelegate.swift; sourceTree = "<group>"; };
 		7C3973DA1D484AF10003771B /* MovieAPP.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieAPP.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C3973DD1D484AF10003771B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +100,7 @@
 		7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterSwipeViewController.swift; sourceTree = "<group>"; };
 		7CC260CD1D75C2930031D1AA /* LoginSwipeableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSwipeableView.swift; sourceTree = "<group>"; };
 		7CC9992F1D77DE2D00A23117 /* FilmCardViewControllerDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilmCardViewControllerDelegate.swift; sourceTree = "<group>"; };
+		7CD3A70B1D9779B40072C4CF /* UserFilmsCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserFilmsCollectionViewController.swift; sourceTree = "<group>"; };
 		7CF4CF561D49B35400F956D9 /* SwipeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeViewController.swift; sourceTree = "<group>"; };
 		7CF4CF581D49BCA600F956D9 /* SwipeableCardView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardView.swift; sourceTree = "<group>"; };
 		7CF4CF5C1D49C08000F956D9 /* SwipeableCardOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwipeableCardOverlayView.swift; sourceTree = "<group>"; };
@@ -214,6 +222,7 @@
 				7C3BDB8F1D485977007D4AE1 /* Movie.swift */,
 				7C3BDB8D1D485540007D4AE1 /* NetworkOperations.swift */,
 				7C3BDB911D485BD0007D4AE1 /* TMDBService.swift */,
+				7C2D80061D9B4B2500842A78 /* DatabaseManager.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -221,6 +230,8 @@
 		7CF4CF5F1D4AC83300F956D9 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				7C2D80081D9BA92F00842A78 /* FilmPosterCollectionViewCell.swift */,
+				7CD3A70B1D9779B40072C4CF /* UserFilmsCollectionViewController.swift */,
 				7CBB37961D4C2A3E00E76BF1 /* FilmCardViewController.swift */,
 				7CBB37981D4C2A6A00E76BF1 /* MasterSwipeViewController.swift */,
 				7C8980681D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift */,
@@ -228,6 +239,7 @@
 				7C40F3081D5D839C00724F00 /* LoginSwipeableCardViewController.swift */,
 				7C3730571D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift */,
 				7CC9992F1D77DE2D00A23117 /* FilmCardViewControllerDelegate.swift */,
+				7C2D800A1D9BBDF000842A78 /* HamburgerTableViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -473,14 +485,18 @@
 				7CF4CF571D49B35400F956D9 /* SwipeViewController.swift in Sources */,
 				7C8980691D5DA4DE009924F1 /* LoginSwipeableViewControllerDelegate.swift in Sources */,
 				7CC999301D77DE2D00A23117 /* FilmCardViewControllerDelegate.swift in Sources */,
+				7CD3A70C1D9779B40072C4CF /* UserFilmsCollectionViewController.swift in Sources */,
 				7CF4CF5D1D49C08000F956D9 /* SwipeableCardOverlayView.swift in Sources */,
 				7CBB37991D4C2A6A00E76BF1 /* MasterSwipeViewController.swift in Sources */,
 				7CF4CF621D4ACA0400F956D9 /* FilmCardView.swift in Sources */,
+				7C2D800B1D9BBDF000842A78 /* HamburgerTableViewController.swift in Sources */,
 				7C3730581D6D4293005C68B0 /* MasterSwipeViewControllerDelegate.swift in Sources */,
 				7C39740E1D484D9F0003771B /* keysUtility.swift in Sources */,
 				7C3973DE1D484AF10003771B /* AppDelegate.swift in Sources */,
 				7C3BDB901D485977007D4AE1 /* Movie.swift in Sources */,
+				7C2D80091D9BA92F00842A78 /* FilmPosterCollectionViewCell.swift in Sources */,
 				7CC260CE1D75C2930031D1AA /* LoginSwipeableView.swift in Sources */,
+				7C2D80071D9B4B2500842A78 /* DatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

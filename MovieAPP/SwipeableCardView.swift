@@ -101,9 +101,9 @@ class SwipeableCardView: UIView {
   
   func embelishCardAppearance() {
     
-    self.layer.cornerRadius = 7
+    self.layer.cornerRadius = 9
     
-    self.layer.shadowRadius = 7
+    self.layer.shadowRadius = 9
     self.layer.shadowOpacity = 0.05
     self.layer.shadowOffset = CGSizeMake(0, 0)
   }
